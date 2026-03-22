@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lambert Family Hawaii Adventure 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ocean: #0077b6;
+    --ocean-dark: #023e8a;
+    --ocean-light: #90e0ef;
+    --sand: #f4e4c1;
+    --sand-dark: #deb887;
+    --sunset: #ff6b35;
+    --sunset-pink: #ff477e;
+    --palm: #2d6a4f;
+    --palm-light: #52b788;
+    --lava: #d00000;
+    --disney-purple: #6a0dad;
+    --text: #1a1a2e;
+    --text-light: #555;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    color: var(--text);
+    background: #fefefe;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 { font-family: 'Playfair Display', serif; }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, rgba(0,80,150,0.55) 0%, rgba(2,50,120,0.45) 40%, rgba(200,80,30,0.4) 100%),
+      url('https://www.cliffsatprinceville.com/wp-content/uploads/Hole-14-PM-Drone-Shot-with-BLUE-Sky-Clouds-Reef.jpg') center/cover;
+    z-index: -1;
+  }
+  .hero-content {
+    max-width: 800px;
+    padding: 2.5rem 3rem;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 900;
+    text-shadow: 2px 4px 20px rgba(0,0,0,0.7), 0 0 40px rgba(0,0,0,0.4);
+    margin-bottom: 0.5rem;
+    line-height: 1.1;
+  }
+  .hero .subtitle {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    font-weight: 600;
+    opacity: 0.95;
+    margin-bottom: 1rem;
+    text-shadow: 1px 2px 10px rgba(0,0,0,0.6), 0 0 30px rgba(0,0,0,0.3);
+  }
+  .hero .dates {
+    font-size: 1.3rem;
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(10px);
+    display: inline-block;
+    padding: 0.6rem 2rem;
+    border-radius: 50px;
+    border: 1px solid rgba(255,255,255,0.25);
+    margin-bottom: 1.5rem;
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.5);
+  }
+  .hero .travelers {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .traveler {
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(8px);
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: 1px solid rgba(255,255,255,0.2);
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+  }
+  .wave-divider {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    line-height: 0;
+  }
+  .wave-divider svg { display: block; width: 100%; height: 80px; }
+
+  /* ===== SCROLL INDICATOR ===== */
+  .scroll-hint {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    text-shadow: 1px 1px 8px rgba(0,0,0,0.6);
+    font-weight: 700;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+  }
+
+  /* ===== CALENDAR ===== */
+  .calendar-section {
+    padding: 4rem 2rem;
+    background: linear-gradient(180deg, #fff 0%, var(--sand) 100%);
+  }
+  .calendar-section h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    color: var(--ocean-dark);
+    margin-bottom: 0.5rem;
+  }
+  .calendar-section .section-subtitle {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+  .calendar-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .cal-header {
+    background: var(--ocean-dark);
+    color: white;
+    text-align: center;
+    padding: 1.2rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  .cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: var(--ocean);
+    color: white;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+  }
+  .cal-weekdays div {
+    text-align: center;
+    padding: 0.7rem 0.3rem;
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background: #e8e8e8;
+  }
+  .cal-day {
+    background: white;
+    min-height: 90px;
+    padding: 0.4rem;
+    position: relative;
+    font-size: 0.8rem;
+  }
+  .cal-day.empty { background: #f8f8f8; }
+  .cal-day .day-num {
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+  .cal-day.kauai { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); }
+  .cal-day.oahu-north { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); }
+  .cal-day.aulani { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); }
+  .cal-day.travel { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); }
+
+  .cal-tag {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: white;
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+  .tag-flight { background: var(--sunset); }
+  .tag-kauai { background: var(--palm); }
+  .tag-oahu { background: var(--ocean); }
+  .tag-aulani { background: var(--disney-purple); }
+  .tag-car { background: var(--sand-dark); color: var(--text); }
+  .tag-xmas { background: var(--lava); }
+  .tag-nye { background: gold; color: var(--text); }
+
+  .cal-legend {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 1.2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+  }
+
+  /* ===== LEG SECTIONS ===== */
+  .leg-section {
+    padding: 4rem 2rem;
+    position: relative;
+  }
+  .leg-section:nth-child(odd) { background: #fff; }
+  .leg-section:nth-child(even) { background: #fafcfe; }
+
+  .leg-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .leg-number {
+    display: inline-block;
+    background: var(--ocean);
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 800;
+    padding: 0.3rem 1.2rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 0.8rem;
+  }
+  .leg-number.kauai-bg { background: var(--palm); }
+  .leg-number.oahu-bg { background: var(--ocean); }
+  .leg-number.aulani-bg { background: var(--disney-purple); }
+
+  .leg-header h2 {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--ocean-dark);
+    margin-bottom: 0.3rem;
+  }
+  .leg-header .leg-dates {
+    font-size: 1.15rem;
+    color: var(--text-light);
+    font-weight: 600;
+  }
+
+  /* ===== STAY CARD ===== */
+  .stay-card {
+    max-width: 1100px;
+    margin: 0 auto 3rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .stay-photos {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4px;
+    height: 500px;
+    min-height: 500px;
+    max-height: 500px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .stay-photos img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .stay-photos .photo-stack {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 4px;
+    overflow: hidden;
+  }
+  .stay-info {
+    padding: 2rem;
+    background: white;
+    position: relative;
+    z-index: 1;
+  }
+  .stay-info p {
+    background: #f0f4f8;
+    padding: 1.2rem 1.4rem;
+    border-radius: 12px;
+    border-left: 4px solid var(--ocean);
+    line-height: 1.8;
+    font-size: 1.05rem;
+    color: #111;
+    font-weight: 600;
+  }
+  .stay-info h3 {
+    font-size: 1.6rem;
+    color: var(--ocean-dark);
+    margin-bottom: 0.5rem;
+  }
+  .stay-info .stay-type {
+    color: var(--sunset);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.8rem;
+  }
+  .stay-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+  .detail-item .icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+  .detail-item .label {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .detail-item .value {
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+
+  /* ===== FLIGHT CARD ===== */
+  .flight-card {
+    max-width: 700px;
+    margin: 0 auto 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .flight-icon {
+    font-size: 2.5rem;
+    color: var(--ocean);
+  }
+  .flight-route {
+    flex: 1;
+    min-width: 200px;
+  }
+  .flight-route .codes {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--ocean-dark);
+  }
+  .flight-route .codes .arrow { color: var(--sunset); margin: 0 0.3rem; }
+  .flight-route .flight-detail {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 0.2rem;
+  }
+  .flight-times {
+    text-align: right;
+  }
+  .flight-times .time {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .flight-times .duration {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    background: var(--sand);
+    padding: 2px 10px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-top: 4px;
+  }
+
+  /* ===== ACTIVITIES ===== */
+  .activities-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .activities-header h3 {
+    font-size: 1.8rem;
+    color: var(--ocean-dark);
+  }
+  .activities-header p {
+    color: var(--text-light);
+    font-size: 1rem;
+    margin-top: 0.3rem;
+  }
+  .activities-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .activity-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    padding: 1.5rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-left: 4px solid var(--ocean);
+  }
+  .activity-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  }
+  .activity-card.kauai-border { border-left-color: var(--palm); }
+  .activity-card.oahu-border { border-left-color: var(--ocean); }
+  .activity-card.aulani-border { border-left-color: var(--disney-purple); }
+  .activity-card .activity-emoji {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .activity-card h4 {
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+  .activity-card p {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  /* ===== FUN FACT BANNER ===== */
+  .fun-fact {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: linear-gradient(135deg, var(--sand) 0%, #fff 100%);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 2px dashed var(--sand-dark);
+  }
+  .fun-fact .ff-icon { font-size: 2rem; flex-shrink: 0; }
+  .fun-fact .ff-text { font-size: 0.95rem; line-height: 1.5; }
+  .fun-fact .ff-text strong { color: var(--ocean-dark); }
+
+  /* ===== PHOTO GALLERY ===== */
+  .photo-gallery {
+    max-width: 1100px;
+    margin: 2rem auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .photo-gallery img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.4s;
+  }
+  .photo-gallery img:hover {
+    transform: scale(1.05);
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    background: var(--ocean-dark);
+    color: white;
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+  .footer h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .footer p {
+    opacity: 0.8;
+    font-size: 1rem;
+  }
+  .countdown {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .countdown-item {
+    text-align: center;
+  }
+  .countdown-item .num {
+    font-size: 2.5rem;
+    font-weight: 900;
+    font-family: 'Playfair Display', serif;
+    display: block;
+    line-height: 1;
+  }
+  .countdown-item .lbl {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.7;
+  }
+
+  /* ===== SECTION DIVIDERS ===== */
+  .section-wave {
+    width: 100%;
+    line-height: 0;
+    margin-top: -1px;
+  }
+  .section-wave svg { width: 100%; height: 60px; display: block; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .stay-photos { grid-template-columns: 1fr; max-height: 300px; }
+    .stay-photos .photo-stack { display: none; }
+    .flight-card { flex-direction: column; text-align: center; }
+    .flight-times { text-align: center; }
+    .cal-day { min-height: 70px; font-size: 0.7rem; }
+    .cal-day .day-num { font-size: 0.9rem; }
+    .cal-tag { font-size: 0.55rem; }
+    .photo-gallery { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .photo-gallery { grid-template-columns: 1fr; }
+    .cal-day { min-height: 55px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Hawaii 2026</h1>
+    <div class="subtitle">The Lambert Family Island Adventure</div>
+    <div class="dates">December 17 &ndash; 31 &bull; 15 Days of Paradise</div>
+    <div class="travelers">
+      <span class="traveler">Jared</span>
+      <span class="traveler">Sally</span>
+      <span class="traveler">Olivia</span>
+      <span class="traveler">Adelyn</span>
+    </div>
+  </div>
+  <div class="scroll-hint">Scroll down to explore your trip</div>
+  <div class="wave-divider">
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none">
+      <path d="M0,40 C300,80 600,0 900,40 C1050,60 1150,50 1200,40 L1200,80 L0,80 Z" fill="#fff"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ============ CALENDAR ============ -->
+<section class="calendar-section" id="calendar">
+  <h2>Your December in Paradise</h2>
+  <p class="section-subtitle">Three islands. Three amazing stays. One incredible family adventure.</p>
+
+  <div class="calendar-container">
+    <div class="cal-header">December 2026</div>
+    <div class="cal-weekdays">
+      <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+    </div>
+    <div class="cal-grid">
+      <!-- Week 1: Dec 1-5 (Tue-Sat) -->
+      <div class="cal-day empty"></div>
+      <div class="cal-day empty"></div>
+      <div class="cal-day"><span class="day-num">1</span></div>
+      <div class="cal-day"><span class="day-num">2</span></div>
+      <div class="cal-day"><span class="day-num">3</span></div>
+      <div class="cal-day"><span class="day-num">4</span></div>
+      <div class="cal-day"><span class="day-num">5</span></div>
+      <!-- Week 2 -->
+      <div class="cal-day"><span class="day-num">6</span></div>
+      <div class="cal-day"><span class="day-num">7</span></div>
+      <div class="cal-day"><span class="day-num">8</span></div>
+      <div class="cal-day"><span class="day-num">9</span></div>
+      <div class="cal-day"><span class="day-num">10</span></div>
+      <div class="cal-day"><span class="day-num">11</span></div>
+      <div class="cal-day"><span class="day-num">12</span></div>
+      <!-- Week 3 -->
+      <div class="cal-day"><span class="day-num">13</span></div>
+      <div class="cal-day"><span class="day-num">14</span></div>
+      <div class="cal-day"><span class="day-num">15</span></div>
+      <div class="cal-day"><span class="day-num">16</span></div>
+      <div class="cal-day travel">
+        <span class="day-num">17</span>
+        <span class="cal-tag tag-flight">SEA &rarr; LIH</span><br>
+        <span class="cal-tag tag-kauai">Kauai!</span>
+      </div>
+      <div class="cal-day kauai">
+        <span class="day-num">18</span>
+        <span class="cal-tag tag-kauai">Princeville</span>
+      </div>
+      <div class="cal-day kauai">
+        <span class="day-num">19</span>
+        <span class="cal-tag tag-kauai">Princeville</span>
+      </div>
+      <!-- Week 4 -->
+      <div class="cal-day kauai">
+        <span class="day-num">20</span>
+        <span class="cal-tag tag-kauai">Princeville</span>
+      </div>
+      <div class="cal-day kauai">
+        <span class="day-num">21</span>
+        <span class="cal-tag tag-kauai">Princeville</span>
+      </div>
+      <div class="cal-day kauai">
+        <span class="day-num">22</span>
+        <span class="cal-tag tag-kauai">Princeville</span>
+      </div>
+      <div class="cal-day kauai">
+        <span class="day-num">23</span>
+        <span class="cal-tag tag-kauai">Princeville</span>
+      </div>
+      <div class="cal-day travel">
+        <span class="day-num">24</span>
+        <span class="cal-tag tag-flight">LIH &rarr; HNL</span><br>
+        <span class="cal-tag tag-oahu">Turtle Bay</span><br>
+        <span class="cal-tag tag-xmas">Christmas Eve</span>
+      </div>
+      <div class="cal-day oahu-north">
+        <span class="day-num">25</span>
+        <span class="cal-tag tag-xmas">Christmas!</span><br>
+        <span class="cal-tag tag-oahu">Turtle Bay</span>
+      </div>
+      <div class="cal-day oahu-north">
+        <span class="day-num">26</span>
+        <span class="cal-tag tag-oahu">Turtle Bay</span>
+      </div>
+      <!-- Week 5 -->
+      <div class="cal-day oahu-north">
+        <span class="day-num">27</span>
+        <span class="cal-tag tag-oahu">Turtle Bay</span>
+      </div>
+      <div class="cal-day aulani">
+        <span class="day-num">28</span>
+        <span class="cal-tag tag-aulani">Aulani Disney</span>
+      </div>
+      <div class="cal-day aulani">
+        <span class="day-num">29</span>
+        <span class="cal-tag tag-aulani">Aulani Disney</span>
+      </div>
+      <div class="cal-day aulani">
+        <span class="day-num">30</span>
+        <span class="cal-tag tag-aulani">Aulani Disney</span>
+      </div>
+      <div class="cal-day travel">
+        <span class="day-num">31</span>
+        <span class="cal-tag tag-flight">HNL &rarr; SEA</span><br>
+        <span class="cal-tag tag-nye">New Year's Eve</span>
+      </div>
+      <div class="cal-day empty"></div>
+      <div class="cal-day empty"></div>
+    </div>
+    <div class="cal-legend">
+      <div class="legend-item"><div class="legend-dot" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);"></div> Kauai</div>
+      <div class="legend-item"><div class="legend-dot" style="background: linear-gradient(135deg, #e3f2fd, #bbdefb);"></div> North Shore Oahu</div>
+      <div class="legend-item"><div class="legend-dot" style="background: linear-gradient(135deg, #f3e5f5, #e1bee7);"></div> Aulani Disney</div>
+      <div class="legend-item"><div class="legend-dot" style="background: linear-gradient(135deg, #fff3e0, #ffe0b2);"></div> Travel Day</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LEG 1: KAUAI ============ -->
+<section class="leg-section" id="kauai">
+  <div class="leg-header">
+    <span class="leg-number kauai-bg">Leg 1</span>
+    <h2>Kauai &mdash; The Garden Isle</h2>
+    <div class="leg-dates">Dec 17 &ndash; 24 &bull; 7 Nights in Princeville</div>
+  </div>
+
+  <!-- Flight -->
+  <div class="flight-card">
+    <div class="flight-icon">&#9992;</div>
+    <div class="flight-route">
+      <div class="codes">SEA <span class="arrow">&rarr;</span> LIH</div>
+      <div class="flight-detail">Delta DL 345 &bull; Airbus A321neo &bull; Nonstop</div>
+      <div class="flight-detail">Delta Comfort+ &bull; Thu, Dec 17</div>
+    </div>
+    <div class="flight-times">
+      <div class="time">3:59 PM &rarr; 8:22 PM</div>
+      <div class="duration">6h 23m</div>
+    </div>
+  </div>
+
+  <!-- Stay -->
+  <div class="stay-card">
+    <div class="stay-photos">
+      <img src="https://a0.muscache.com/im/pictures/miso/Hosting-1329339551645556156/original/d4e82924-193e-4e4b-8ede-7e253ab6bb49.jpeg?im_w=960" alt="The Cliffs at Princeville oceanview">
+      <div class="photo-stack">
+        <img src="https://a0.muscache.com/im/pictures/miso/Hosting-1329339551645556156/original/0165ef4f-a30a-4988-8732-66c12ca89bfe.jpeg?im_w=720" alt="Cliffs at Princeville interior">
+        <img src="https://www.cliffsatprinceville.com/wp-content/uploads/Property2-lg.jpg" alt="Cliffs at Princeville ocean view">
+      </div>
+    </div>
+    <div class="stay-info">
+      <div class="stay-type">Airbnb &bull; Entire Home</div>
+      <h3>The Cliffs at Princeville</h3>
+      <p>Perched on a volcanic bluff 100 feet above the Pacific Ocean, this oceanview condo has jaw-dropping views of the North Shore. Watch whales breach from your lanai, spot sea turtles offshore, and fall asleep to the sound of waves crashing on the reef below.</p>
+      <a href="https://www.airbnb.com/rooms/1329339551645556156" target="_blank" style="display:inline-block;margin-top:0.8rem;padding:0.5rem 1.2rem;background:var(--palm);color:white;border-radius:8px;text-decoration:none;font-weight:700;font-size:0.9rem;">View on Airbnb &rarr;</a>
+      <div class="stay-details">
+        <div class="detail-item">
+          <span class="icon">&#127968;</span>
+          <div><div class="label">Unit</div><div class="value">2BR / 2BA Oceanview</div></div>
+        </div>
+        <div class="detail-item">
+          <span class="icon">&#128716;</span>
+          <div><div class="label">Sleeps</div><div class="value">8 (4 Beds)</div></div>
+        </div>
+        <div class="detail-item">
+          <span class="icon">&#128205;</span>
+          <div><div class="label">Address</div><div class="value">3811 Edward Rd, Princeville</div></div>
+        </div>
+        <div class="detail-item">
+          <span class="icon">&#128663;</span>
+          <div><div class="label">Rental Car</div><div class="value">Jeep Grand Cherokee</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo gallery -->
+  <div class="photo-gallery">
+    <img src="https://a0.muscache.com/im/pictures/miso/Hosting-1329339551645556156/original/55ea2cc2-1c82-490b-b870-9550ed9bfb29.jpeg?im_w=960" alt="Cliffs at Princeville view">
+    <img src="https://www.cliffsatprinceville.com/wp-content/uploads/Hole-14-PM-Drone-Shot-with-BLUE-Sky-Clouds-Reef.jpg" alt="Princeville coastline drone shot">
+    <img src="https://www.cliffsatprinceville.com/wp-content/uploads/princeville.jpg" alt="Princeville scenery">
+  </div>
+
+  <!-- Fun Fact -->
+  <div class="fun-fact">
+    <span class="ff-icon">&#127754;</span>
+    <div class="ff-text"><strong>Did you know?</strong> Kauai is the oldest of the main Hawaiian islands (about 5 million years old!) and gets so much rain that it's home to one of the wettest spots on Earth &mdash; Mount Wai'ale'ale. That's why everything is SO incredibly green!</div>
+  </div>
+
+  <!-- Activities -->
+  <div class="activities-header">
+    <h3>Things To Do on Kauai</h3>
+    <p>Adventures for the whole family on the Garden Isle</p>
+  </div>
+  <div class="activities-grid">
+    <div class="activity-card kauai-border">
+      <div class="activity-emoji">&#127966;</div>
+      <h4>Waimea Canyon</h4>
+      <p>The "Grand Canyon of the Pacific" &mdash; a 3,600-foot-deep canyon painted in red, orange, and green. Drive to the lookouts, hike the easy Iliau Nature Loop, and prepare for your jaws to drop!</p>
+    </div>
+    <div class="activity-card kauai-border">
+      <div class="activity-emoji">&#128758;</div>
+      <h4>Mountain Tubing Adventure</h4>
+      <p>Float through pitch-black lava-rock tunnels from the 1870s on inner tubes with headlamps! A 2.5-mile underground river adventure through an old sugar plantation. Ages 5+ welcome.</p>
+    </div>
+    <div class="activity-card kauai-border">
+      <div class="activity-emoji">&#128038;</div>
+      <h4>Kilauea Lighthouse</h4>
+      <p>Walk to a clifftop lighthouse where you can spot massive seabirds with 6-foot wingspans! December is also prime whale-watching season from the cliffs. Kids can earn a Junior Ranger badge!</p>
+    </div>
+    <div class="activity-card kauai-border">
+      <div class="activity-emoji">&#9973;</div>
+      <h4>Na Pali Coast Boat Tour</h4>
+      <p>Cruise along 4,000-foot sea cliffs, hidden waterfalls, and sea caves &mdash; with a great chance of spotting humpback whales! Winter tours depart from Port Allen on the south shore.</p>
+    </div>
+    <div class="activity-card kauai-border">
+      <div class="activity-emoji">&#127958;</div>
+      <h4>Hanalei Bay Beach Day</h4>
+      <p>One of the most beautiful bays on Earth! Build sandcastles on the wide golden beach, play in the shallows near the pier, and watch surfers ride the big winter waves. Bring a picnic!</p>
+    </div>
+    <div class="activity-card kauai-border">
+      <div class="activity-emoji">&#129416;</div>
+      <h4>Snorkeling at Anini Beach</h4>
+      <p>Protected by a long offshore reef, Anini Beach stays calm even in winter &mdash; the North Shore's best bet for safe snorkeling, wading, and paddle sports with the family.</p>
+    </div>
+  </div>
+
+  <div class="fun-fact" style="margin-top: 2rem;">
+    <span class="ff-icon">&#9888;&#65039;</span>
+    <div class="ff-text"><strong>Winter Safety Tip:</strong> The North Shore gets big waves in December! Tunnels Beach and Queen's Bath are beautiful but dangerous in winter swells. Enjoy them from a safe viewing distance. For swimming, stick to Anini Beach or head to Poipu on the south shore.</div>
+  </div>
+</section>
+
+<!-- ============ LEG 2: NORTH SHORE OAHU ============ -->
+<section class="leg-section" id="oahu">
+  <div class="leg-header">
+    <span class="leg-number oahu-bg">Leg 2</span>
+    <h2>North Shore Oahu &mdash; Surf &amp; Soul</h2>
+    <div class="leg-dates">Dec 24 &ndash; 28 &bull; 4 Nights at Turtle Bay &bull; Christmas!</div>
+  </div>
+
+  <!-- Flight -->
+  <div class="flight-card">
+    <div class="flight-icon">&#9992;</div>
+    <div class="flight-route">
+      <div class="codes">LIH <span class="arrow">&rarr;</span> HNL</div>
+      <div class="flight-detail">Alaska AS 1094 &bull; Boeing 717-200 &bull; Nonstop</div>
+      <div class="flight-detail">Thu, Dec 24 &bull; Christmas Eve Island Hop!</div>
+    </div>
+    <div class="flight-times">
+      <div class="time">2:16 PM &rarr; 2:55 PM</div>
+      <div class="duration">39 min</div>
+    </div>
+  </div>
+
+  <!-- Stay -->
+  <div class="stay-card">
+    <div class="stay-photos">
+      <img src="https://a0.muscache.com/im/pictures/miso/Hosting-990036194521537606/original/33d94147-4bf6-4584-97b2-8779148a74d1.jpeg?im_w=960" alt="Turtle Bay Getaway living area">
+      <div class="photo-stack">
+        <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6OTkwMDM2MTk0NTIxNTM3NjA2/original/e16a1be4-4bf2-4859-aa4e-fb1d67f5d7a8.jpeg?im_w=960" alt="Turtle Bay Getaway view">
+        <img src="https://a0.muscache.com/im/pictures/miso/Hosting-990036194521537606/original/ea44b1a6-3ff1-4423-ae23-e8fdf962eb93.jpeg?im_w=960" alt="Turtle Bay Getaway bedroom">
+      </div>
+    </div>
+    <div class="stay-info">
+      <div class="stay-type">Airbnb &bull; Entire Home</div>
+      <h3>Turtle Bay Getaway</h3>
+      <p>A 2BD+ Loft in the Kuilima Estates within the legendary Turtle Bay Resort grounds. Steps from world-class surf breaks, private pools, tennis &amp; pickleball courts, and over 5 miles of secluded beaches. Christmas on the North Shore!</p>
+      <a href="https://www.airbnb.com/rooms/990036194521537606" target="_blank" style="display:inline-block;margin-top:0.8rem;padding:0.5rem 1.2rem;background:var(--ocean);color:white;border-radius:8px;text-decoration:none;font-weight:700;font-size:0.9rem;">View on Airbnb &rarr;</a>
+      <div class="stay-details">
+        <div class="detail-item">
+          <span class="icon">&#127968;</span>
+          <div><div class="label">Unit</div><div class="value">2BD + Loft</div></div>
+        </div>
+        <div class="detail-item">
+          <span class="icon">&#128205;</span>
+          <div><div class="label">Address</div><div class="value">57-77 Eleku Kuilima Pl, Kahuku</div></div>
+        </div>
+        <div class="detail-item">
+          <span class="icon">&#128663;</span>
+          <div><div class="label">Rental Car</div><div class="value">Mazda CX-50</div></div>
+        </div>
+        <div class="detail-item">
+          <span class="icon">&#127876;</span>
+          <div><div class="label">Special</div><div class="value">Christmas Morning Here!</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo gallery -->
+  <div class="photo-gallery">
+    <img src="https://turtlebayexperiences.com/sites/default/files/styles/cards_312x240/public/2024-04/Aerial%20Kuilima%20Cove%20%282%29.jpg" alt="Kuilima Cove from above">
+    <img src="https://turtlebayexperiences.com/sites/default/files/styles/cards_312x240/public/2022-11/Stables%20Beach%20%283%29.jpg" alt="Stables Beach at Turtle Bay">
+    <img src="https://turtlebayexperiences.com/sites/default/files/styles/cards_312x240/public/2023-03/Hidden%20Beach%20Tide%20Pools.jpg" alt="Hidden Beach tide pools">
+  </div>
+
+  <div class="fun-fact">
+    <span class="ff-icon">&#127944;</span>
+    <div class="ff-text"><strong>Did you know?</strong> December is peak big-wave season on the North Shore! The famous Banzai Pipeline and Sunset Beach host world-championship surf competitions with waves reaching 30+ feet. You can watch from the sand &mdash; it's absolutely thrilling!</div>
+  </div>
+
+  <!-- Activities -->
+  <div class="activities-header">
+    <h3>Things To Do on the North Shore</h3>
+    <p>Big waves, sea turtles, shrimp trucks &amp; Christmas magic</p>
+  </div>
+  <div class="activities-grid">
+    <div class="activity-card oahu-border">
+      <div class="activity-emoji">&#127940;</div>
+      <h4>Watch Pipeline &amp; Sunset Beach</h4>
+      <p>Stand on the sand and watch surfers ride some of the most powerful waves on Earth! Free, no tickets needed &mdash; just show up at Ehukai Beach Park and prepare to yell "WHOAAAA!"</p>
+    </div>
+    <div class="activity-card oahu-border">
+      <div class="activity-emoji">&#127917;</div>
+      <h4>Polynesian Cultural Center</h4>
+      <p>Explore six island villages &mdash; throw spears, husk coconuts, paddle canoes, and get a Keiki Passport! The evening "Ha: Breath of Life" fire-knife show will leave everyone speechless.</p>
+    </div>
+    <div class="activity-card oahu-border">
+      <div class="activity-emoji">&#129424;</div>
+      <h4>Shrimp Trucks!</h4>
+      <p>Giovanni's famous graffiti-covered truck serves legendary garlic butter shrimp over rice. Get messy, love every bite, and sign the truck with a Sharpie like thousands of visitors before you!</p>
+    </div>
+    <div class="activity-card oahu-border">
+      <div class="activity-emoji">&#129416;</div>
+      <h4>Snorkeling at Kuilima Cove</h4>
+      <p>This naturally protected cove stays calm even when the rest of the North Shore is raging &mdash; snorkel with tropical fish, sea turtles, and maybe an octopus! Right at Turtle Bay.</p>
+    </div>
+    <div class="activity-card oahu-border">
+      <div class="activity-emoji">&#128034;</div>
+      <h4>Laniakea "Turtle Beach"</h4>
+      <p>Hawaiian green sea turtles regularly haul themselves onto the sand to sunbathe. Watch these gentle giants up close (from a respectful distance) &mdash; it's absolutely magical!</p>
+    </div>
+    <div class="activity-card oahu-border">
+      <div class="activity-emoji">&#128014;</div>
+      <h4>Horseback Riding to Kawela Bay</h4>
+      <p>Ride horses along the coastline through Turtle Bay's 1,300-acre property to a hidden turquoise cove. Family-friendly wagon rides also available &mdash; one of the most beautiful secret spots on the island!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LEG 3: AULANI DISNEY ============ -->
+<section class="leg-section" id="aulani" style="background: linear-gradient(180deg, #fafcfe 0%, #f3e5f5 100%);">
+  <div class="leg-header">
+    <span class="leg-number aulani-bg">Leg 3 &mdash; The Grand Finale!</span>
+    <h2>Aulani &mdash; Disney Resort &amp; Spa</h2>
+    <div class="leg-dates">Dec 28 &ndash; 31 &bull; 3 Nights at Ko Olina &bull; New Year's Eve!</div>
+  </div>
+
+  <!-- Stay -->
+  <div class="stay-card" style="border: 3px solid #e1bee7;">
+    <div class="stay-photos">
+      <img src="https://media.cntraveler.com/photos/53d9c394dcd5888e1459aacc/master/w_1600,c_limit/aulani-oahu-hawaii-112440-4.jpg" alt="Aulani Disney Resort exterior">
+      <div class="photo-stack">
+        <img src="https://www.hawaiimagazine.com/wp-content/uploads/2023/07/n/u/02-waikolohe-stream-aulani.jpg" alt="Waikolohe Stream at Aulani">
+        <img src="https://koolina.com/app/uploads/2024/10/needtoknow-disneys-aulani-1200x675.jpg" alt="Aulani Disney Resort overview">
+      </div>
+    </div>
+    <div class="stay-info">
+      <div class="stay-type" style="color: var(--disney-purple);">Disney Resort &bull; Poolside Gardens View</div>
+      <h3>Aulani, A Disney Resort &amp; Spa</h3>
+      <p>The ultimate Disney Hawaii experience! An 8,200 sq ft pool with volcanic body slide, a lazy river through caverns, a saltwater snorkeling lagoon, character meet-and-greets with Mickey, Moana &amp; Stitch, plus a kids' club that your kids will NEVER want to leave.</p>
+      <a href="https://www.disneyaulani.com/" target="_blank" style="display:inline-block;margin-top:0.8rem;padding:0.5rem 1.2rem;background:var(--disney-purple);color:white;border-radius:8px;text-decoration:none;font-weight:700;font-size:0.9rem;">View Aulani Resort &rarr;</a>
+      <div class="stay-details">
+        <div class="detail-item">
+          <span class="icon">&#127984;</span>
+          <div><div class="label">Room</div><div class="value">Poolside Gardens View</div></div>
+        </div>
+        <div class="detail-item">
+          <span class="icon">&#128205;</span>
+          <div><div class="label">Address</div><div class="value">92-1185 Ali'inui Dr, Kapolei</div></div>
+        </div>
+        <div class="detail-item">
+          <span class="icon">&#128100;</span>
+          <div><div class="label">Guests</div><div class="value">2 Adults, 2 Children</div></div>
+        </div>
+        <div class="detail-item">
+          <span class="icon">&#127878;</span>
+          <div><div class="label">Special</div><div class="value">New Year's Eve!</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Aulani Photo Gallery -->
+  <div class="photo-gallery">
+    <img src="https://images.squarespace-cdn.com/content/v1/64596cc852161f028641373d/1683588818556-MEXMRPY2URO7A264H7MZ/f-26-19-12785283_Dga2phTE_Resort_3.jpg" alt="Aulani Disney Resort overview">
+    <img src="https://static1.squarespace.com/static/64596cc852161f028641373d/645978f0fa79872fb66391f2/64597930fa79872fb663b50b/1683585328854/f-26-14-12785283_eZOv3F9J_Resort_1.jpg?format=1500w" alt="Aulani Resort view">
+    <img src="https://koolina.com/app/uploads/2021/05/aulani-disney-03.jpg" alt="Aulani Disney Ko Olina">
+  </div>
+
+  <div class="fun-fact" style="border-color: #ce93d8;">
+    <span class="ff-icon">&#10024;</span>
+    <div class="ff-text"><strong>Disney Magic Awaits!</strong> Aulani has the only private saltwater snorkeling lagoon on Oahu called Rainbow Reef, where you can swim alongside over 1,000 tropical fish! Plus, Mickey Mouse personally visits your table at the Makahiki character breakfast.</div>
+  </div>
+
+  <!-- Activities -->
+  <div class="activities-header">
+    <h3>Things To Do at Aulani &amp; Ko Olina</h3>
+    <p>Disney magic meets Hawaiian paradise</p>
+  </div>
+  <div class="activities-grid">
+    <div class="activity-card aulani-border">
+      <div class="activity-emoji">&#127946;</div>
+      <h4>Waikolohe Valley Water Park</h4>
+      <p>An 8,200 sq ft zero-entry pool with the Volcanic Vertical body slide, Tubestone Curl tube ride, a lazy river through caverns &amp; fountain springs, and Menehune Bridge splash zone for little ones!</p>
+    </div>
+    <div class="activity-card aulani-border">
+      <div class="activity-emoji">&#127757;</div>
+      <h4>Aunty's Beach House (Free Kids Club!)</h4>
+      <p>Ages 4-12 get a supervised "beach mansion" packed with Disney movies, Hawaiian crafts, video games, and themed activities. Complimentary with your resort stay &mdash; kids will never want to leave!</p>
+    </div>
+    <div class="activity-card aulani-border">
+      <div class="activity-emoji">&#128037;</div>
+      <h4>Character Meet &amp; Greets</h4>
+      <p>Mickey, Minnie, Moana, Stitch, Goofy &amp; Pluto pop up throughout the resort for photos and hugs! Book the Makahiki character breakfast where Mickey visits your table.</p>
+    </div>
+    <div class="activity-card aulani-border">
+      <div class="activity-emoji">&#127774;</div>
+      <h4>Ko Olina Lagoon Snorkeling</h4>
+      <p>Wade into calm, crystal-clear protected lagoons where even the youngest kids can safely snorkel over butterflyfish and tangs. Shallow water (4-5 ft), soft imported sand &mdash; pure paradise.</p>
+    </div>
+    <div class="activity-card aulani-border">
+      <div class="activity-emoji">&#127879;</div>
+      <h4>Ka Wa'a Lu'au</h4>
+      <p>Aulani's beachfront luau features a Hawaiian feast, live music, hula dancing, and fire-knife performers under the stars. The perfect way to celebrate your trip!</p>
+    </div>
+    <div class="activity-card aulani-border">
+      <div class="activity-emoji">&#129408;</div>
+      <h4>Rainbow Reef Snorkeling</h4>
+      <p>Aulani's private saltwater snorkeling lagoon is home to 1,000+ tropical fish! It's the only one on Oahu &mdash; like swimming in a real-life aquarium. Gear provided.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RETURN FLIGHT ============ -->
+<section class="leg-section" style="background: linear-gradient(180deg, #f3e5f5 0%, var(--sand) 50%, white 100%); padding-top: 3rem; padding-bottom: 2rem;">
+  <div class="leg-header" style="margin-bottom: 2rem;">
+    <span class="leg-number" style="background: var(--sunset);">Heading Home</span>
+    <h2>Back to Seattle</h2>
+    <div class="leg-dates">New Year's Eve &bull; Dec 31, 2026</div>
+  </div>
+  <div class="flight-card">
+    <div class="flight-icon">&#9992;</div>
+    <div class="flight-route">
+      <div class="codes">HNL <span class="arrow">&rarr;</span> SEA</div>
+      <div class="flight-detail">Delta DL 673 &bull; Airbus A321neo &bull; Nonstop</div>
+      <div class="flight-detail">Delta Comfort+ &bull; Wed, Dec 31</div>
+    </div>
+    <div class="flight-times">
+      <div class="time">8:10 AM &rarr; 4:04 PM</div>
+      <div class="duration">5h 54m</div>
+    </div>
+  </div>
+  <div class="fun-fact" style="margin-top: 1rem;">
+    <span class="ff-icon">&#127878;</span>
+    <div class="ff-text"><strong>Happy New Year!</strong> You'll land back in Seattle just in time to ring in 2027. What a way to close out 15 days of Hawaiian paradise!</div>
+  </div>
+</section>
+
+<!-- ============ FOOTER / COUNTDOWN ============ -->
+<footer class="footer">
+  <h2>Paradise is Calling!</h2>
+  <p>The Lambert Family Hawaii Adventure 2026</p>
+  <div class="countdown" id="countdown"></div>
+  <p style="margin-top: 2rem; font-size: 0.8rem; opacity: 0.5;">Dec 17 &ndash; 31, 2026 &bull; Kauai &bull; North Shore Oahu &bull; Aulani Disney</p>
+</footer>
+
+<script>
+  // Countdown timer
+  function updateCountdown() {
+    const tripDate = new Date('2026-12-17T15:59:00-08:00');
+    const now = new Date();
+    const diff = tripDate - now;
+
+    if (diff <= 0) {
+      document.getElementById('countdown').innerHTML = '<p style="font-size:1.5rem;">&#127796; You\'re in Hawaii! &#127796;</p>';
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+    document.getElementById('countdown').innerHTML = `
+      <div class="countdown-item"><span class="num">${days}</span><span class="lbl">Days</span></div>
+      <div class="countdown-item"><span class="num">${hours}</span><span class="lbl">Hours</span></div>
+      <div class="countdown-item"><span class="num">${mins}</span><span class="lbl">Minutes</span></div>
+      <div class="countdown-item"><span class="num">${secs}</span><span class="lbl">Seconds</span></div>
+    `;
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // Graceful image fallback - replace broken images with a colored placeholder
+  document.querySelectorAll('img').forEach(img => {
+    img.addEventListener('error', function() {
+      const alt = this.alt || 'Hawaii';
+      const colors = ['#0077b6','#2d6a4f','#6a0dad','#ff6b35','#023e8a'];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      this.style.background = `linear-gradient(135deg, ${color}, ${color}dd)`;
+      this.style.display = 'flex';
+      this.style.alignItems = 'center';
+      this.style.justifyContent = 'center';
+      this.style.minHeight = '200px';
+      this.alt = '';
+      // Create a text overlay
+      const parent = this.parentElement;
+      if (parent && !parent.querySelector('.img-fallback')) {
+        const label = document.createElement('div');
+        label.className = 'img-fallback';
+        label.style.cssText = `position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+          color:white;font-size:1rem;font-weight:700;text-align:center;padding:1rem;
+          background:linear-gradient(135deg,${color},${color}cc);`;
+        label.textContent = alt;
+        parent.style.position = 'relative';
+        parent.appendChild(label);
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
