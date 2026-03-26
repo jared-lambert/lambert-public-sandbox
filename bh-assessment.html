@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BH Physical Environment Assessment Tool</title>
+<style>
+:root {
+  --primary: #1a5276;
+  --primary-light: #2980b9;
+  --accent: #27ae60;
+  --warning: #e67e22;
+  --danger: #c0392b;
+  --bg: #f5f6fa;
+  --card: #fff;
+  --text: #2c3e50;
+  --text-light: #7f8c8d;
+  --border: #dcdde1;
+  --radius: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+/* ── Header ── */
+.app-header {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  padding: 16px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+.app-header h1 { font-size: 1.1rem; font-weight: 600; }
+.app-header .subtitle { font-size: .8rem; opacity: .85; margin-top: 2px; }
+
+/* ── Navigation ── */
+.nav-bar {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 8px 12px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 68px;
+  z-index: 99;
+}
+.nav-btn {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: #fff;
+  font-size: .75rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .2s;
+}
+.nav-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.nav-btn .badge {
+  display: inline-block;
+  min-width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  border-radius: 8px;
+  font-size: .65rem;
+  font-weight: 700;
+  margin-left: 4px;
+  padding: 0 4px;
+}
+.nav-btn .badge.complete { background: var(--accent); color: #fff; }
+.nav-btn .badge.partial { background: var(--warning); color: #fff; }
+.nav-btn .badge.empty { background: var(--border); color: var(--text-light); }
+
+/* ── Panels ── */
+.panel { display: none; padding: 16px; max-width: 900px; margin: 0 auto; }
+.panel.active { display: block; }
+
+/* ── Cards ── */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.card h2 { font-size: 1rem; color: var(--primary); margin-bottom: 8px; }
+.card h3 { font-size: .9rem; color: var(--primary-light); margin: 12px 0 6px; }
+
+/* ── Section info ── */
+.section-info {
+  background: #eaf2f8;
+  border-left: 4px solid var(--primary-light);
+  padding: 10px 12px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin-bottom: 12px;
+  font-size: .82rem;
+}
+.section-info strong { color: var(--primary); }
+
+/* ── Matrix table ── */
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .78rem;
+  margin-bottom: 12px;
+}
+.matrix-table th {
+  background: var(--primary);
+  color: #fff;
+  padding: 8px 6px;
+  text-align: left;
+  font-weight: 600;
+}
+.matrix-table td {
+  padding: 6px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.matrix-table tr:nth-child(even) td { background: #f9fafb; }
+
+/* ── Checklist items ── */
+.checklist-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 10px;
+  transition: border-color .2s;
+}
+.checklist-item.status-compliant { border-left: 4px solid var(--accent); }
+.checklist-item.status-non-compliant { border-left: 4px solid var(--danger); }
+.checklist-item.status-na { border-left: 4px solid var(--text-light); }
+.checklist-item.status-needs-review { border-left: 4px solid var(--warning); }
+
+.item-text { font-size: .85rem; margin-bottom: 8px; font-weight: 500; }
+
+.status-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.status-btn {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  font-size: .72rem;
+  cursor: pointer;
+  background: #fff;
+  transition: all .15s;
+}
+.status-btn:hover { background: #f0f0f0; }
+.status-btn.selected-compliant { background: var(--accent); color: #fff; border-color: var(--accent); }
+.status-btn.selected-non-compliant { background: var(--danger); color: #fff; border-color: var(--danger); }
+.status-btn.selected-na { background: var(--text-light); color: #fff; border-color: var(--text-light); }
+.status-btn.selected-needs-review { background: var(--warning); color: #fff; border-color: var(--warning); }
+
+.notes-input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px;
+  font-size: .8rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 36px;
+}
+.notes-input:focus { outline: none; border-color: var(--primary-light); }
+
+/* ── Photo capture ── */
+.photo-section { margin-top: 8px; }
+.photo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border: 1px dashed var(--primary-light);
+  border-radius: var(--radius);
+  background: #eaf2f8;
+  color: var(--primary-light);
+  font-size: .75rem;
+  cursor: pointer;
+}
+.photo-btn:hover { background: #d5e8f7; }
+.photo-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.photo-thumb {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.photo-thumb img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+.photo-thumb .remove-photo {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(192,57,43,.85);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: .7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Evidence docs ── */
+.evidence-list {
+  list-style: none;
+  padding: 0;
+}
+.evidence-list li {
+  font-size: .8rem;
+  padding: 3px 0;
+  color: var(--text-light);
+}
+.evidence-list li::before { content: "\1F4C1 "; }
+
+/* ── Key Insight ── */
+.key-insight {
+  background: #fef9e7;
+  border-left: 4px solid #f1c40f;
+  padding: 8px 12px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: .8rem;
+  margin: 8px 0;
+}
+
+/* ── Form fields ── */
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: .8rem; font-weight: 600; margin-bottom: 4px; }
+.form-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: .85rem;
+  font-family: inherit;
+}
+.form-input:focus { outline: none; border-color: var(--primary-light); }
+
+/* ── Buttons ── */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-light); }
+.btn-accent { background: var(--accent); color: #fff; }
+.btn-accent:hover { opacity: .9; }
+.btn-outline { background: #fff; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { background: var(--bg); }
+.btn-danger { background: var(--danger); color: #fff; }
+
+/* ── Progress bar ── */
+.progress-wrap { margin: 8px 0; }
+.progress-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width .3s;
+}
+.progress-fill.good { background: var(--accent); }
+.progress-fill.mid { background: var(--warning); }
+.progress-label { font-size: .72rem; color: var(--text-light); margin-top: 2px; }
+
+/* ── Summary stats ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.stat-card {
+  text-align: center;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+.stat-num { font-size: 1.5rem; font-weight: 700; }
+.stat-label { font-size: .72rem; color: var(--text-light); }
+
+/* ── Actions bar ── */
+.actions-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  background: #fff;
+  border-top: 1px solid var(--border);
+  position: sticky;
+  bottom: 0;
+  z-index: 99;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ── Lightbox ── */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.85);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 95vw; max-height: 95vh; border-radius: var(--radius); }
+
+/* ── Report view ── */
+.report-section { page-break-inside: avoid; margin-bottom: 20px; }
+.finding-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: .7rem;
+  font-weight: 700;
+  color: #fff;
+}
+.finding-badge.compliant { background: var(--accent); }
+.finding-badge.non-compliant { background: var(--danger); }
+.finding-badge.needs-review { background: var(--warning); }
+.finding-badge.na { background: var(--text-light); }
+.finding-badge.not-assessed { background: var(--border); color: var(--text); }
+
+@media print {
+  .app-header, .nav-bar, .actions-bar, .no-print { display: none !important; }
+  .panel { display: block !important; max-width: 100%; }
+  .panel:not(#panel-report) { display: none !important; }
+  #panel-report { display: block !important; }
+  .card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+  body { background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <h1>Behavioral Health Physical Environment Assessment</h1>
+  <div class="subtitle">FGI 2026 Draft &times; Joint Commission A360 &times; CMS CoPs</div>
+</header>
+
+<nav class="nav-bar" id="navBar"></nav>
+
+<!-- ═══════════ PANEL: PROJECT INFO ═══════════ -->
+<div class="panel active" id="panel-info">
+  <div class="card">
+    <h2>Assessment Information</h2>
+    <div class="form-group">
+      <label>Facility Name</label>
+      <input class="form-input" id="facilityName" placeholder="e.g., Sunrise Adolescent BH Hospital">
+    </div>
+    <div class="form-group">
+      <label>Surveyor / Reviewer Name</label>
+      <input class="form-input" id="reviewerName" placeholder="Your name">
+    </div>
+    <div class="form-group">
+      <label>Assessment Date</label>
+      <input class="form-input" type="date" id="assessmentDate">
+    </div>
+    <div class="form-group">
+      <label>Unit / Area Being Assessed</label>
+      <input class="form-input" id="unitArea" placeholder="e.g., Unit 2A — Adolescent Acute">
+    </div>
+    <div class="form-group">
+      <label>Assessment Purpose</label>
+      <select class="form-input" id="assessmentPurpose">
+        <option value="">Select...</option>
+        <option>Pre-survey Readiness</option>
+        <option>CMS Validation Survey Preparation</option>
+        <option>Post-Incident Environment Review</option>
+        <option>Annual Environment of Care Assessment</option>
+        <option>New Construction / Renovation Commissioning</option>
+        <option>Other</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Required Documents Verification</h2>
+    <p style="font-size:.82rem;color:var(--text-light);margin-bottom:12px">Before beginning the physical tour, verify the following documents are available and current.</p>
+
+    <div class="checklist-item" id="doc-fp">
+      <div class="item-text">Functional Program (FP)</div>
+      <div class="status-row">
+        <button class="status-btn" data-status="available" onclick="setDocStatus('doc-fp','available',this)">Available</button>
+        <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-fp','outdated',this)">Outdated</button>
+        <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-fp','missing',this)">Missing</button>
+      </div>
+      <textarea class="notes-input" placeholder="Notes (date of last revision, scope, etc.)" data-field="doc-fp-notes"></textarea>
+    </div>
+
+    <div class="checklist-item" id="doc-sra">
+      <div class="item-text">Safety Risk Assessment (SRA) - Behavioral Health Specific</div>
+      <div class="status-row">
+        <button class="status-btn" data-status="available" onclick="setDocStatus('doc-sra','available',this)">Available</button>
+        <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-sra','outdated',this)">Outdated</button>
+        <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-sra','missing',this)">Missing</button>
+      </div>
+      <textarea class="notes-input" placeholder="Notes (date, scope of assessment, responsible party)" data-field="doc-sra-notes"></textarea>
+    </div>
+
+    <div class="checklist-item" id="doc-lra">
+      <div class="item-text">Ligature Risk Assessment (room-by-room)</div>
+      <div class="status-row">
+        <button class="status-btn" data-status="available" onclick="setDocStatus('doc-lra','available',this)">Available</button>
+        <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-lra','outdated',this)">Outdated</button>
+        <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-lra','missing',this)">Missing</button>
+      </div>
+      <textarea class="notes-input" placeholder="Notes" data-field="doc-lra-notes"></textarea>
+    </div>
+
+    <div class="checklist-item" id="doc-secra">
+      <div class="item-text">Security Risk Assessment</div>
+      <div class="status-row">
+        <button class="status-btn" data-status="available" onclick="setDocStatus('doc-secra','available',this)">Available</button>
+        <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-secra','outdated',this)">Outdated</button>
+        <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-secra','missing',this)">Missing</button>
+      </div>
+      <textarea class="notes-input" placeholder="Notes" data-field="doc-secra-notes"></textarea>
+    </div>
+
+    <div class="checklist-item" id="doc-lsp">
+      <div class="item-text">Life Safety Plans (current as-built)</div>
+      <div class="status-row">
+        <button class="status-btn" data-status="available" onclick="setDocStatus('doc-lsp','available',this)">Available</button>
+        <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-lsp','outdated',this)">Outdated</button>
+        <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-lsp','missing',this)">Missing</button>
+      </div>
+      <textarea class="notes-input" placeholder="Notes" data-field="doc-lsp-notes"></textarea>
+    </div>
+
+    <div class="checklist-item" id="doc-cx">
+      <div class="item-text">Commissioning Reports</div>
+      <div class="status-row">
+        <button class="status-btn" data-status="available" onclick="setDocStatus('doc-cx','available',this)">Available</button>
+        <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-cx','outdated',this)">Outdated</button>
+        <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-cx','missing',this)">Missing</button>
+      </div>
+      <textarea class="notes-input" placeholder="Notes" data-field="doc-cx-notes"></textarea>
+    </div>
+
+    <div class="checklist-item" id="doc-hva">
+      <div class="item-text">Hazard Vulnerability Assessment (HVA)</div>
+      <div class="status-row">
+        <button class="status-btn" data-status="available" onclick="setDocStatus('doc-hva','available',this)">Available</button>
+        <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-hva','outdated',this)">Outdated</button>
+        <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-hva','missing',this)">Missing</button>
+      </div>
+      <textarea class="notes-input" placeholder="Notes" data-field="doc-hva-notes"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ ASSESSMENT PANELS (generated by JS) ═══════════ -->
+<div class="panel" id="panel-pe01"></div>
+<div class="panel" id="panel-pe02"></div>
+<div class="panel" id="panel-pe03"></div>
+<div class="panel" id="panel-pe04"></div>
+<div class="panel" id="panel-pe05"></div>
+<div class="panel" id="panel-pe06"></div>
+<div class="panel" id="panel-ls"></div>
+<div class="panel" id="panel-em"></div>
+<div class="panel" id="panel-gov"></div>
+
+<!-- ═══════════ PANEL: REPORT ═══════════ -->
+<div class="panel" id="panel-report"></div>
+
+<!-- ═══════════ ACTIONS BAR ═══════════ -->
+<div class="actions-bar no-print">
+  <button class="btn btn-primary" onclick="saveToLocal()">Save Progress</button>
+  <button class="btn btn-outline" onclick="loadFromLocal()">Load Saved</button>
+  <button class="btn btn-accent" onclick="generateReport()">Generate Report</button>
+  <button class="btn btn-outline" onclick="exportJSON()">Export JSON</button>
+  <button class="btn btn-outline" onclick="importJSON()">Import JSON</button>
+  <button class="btn btn-danger" onclick="clearAll()">Clear All</button>
+  <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
+</div>
+
+<!-- ═══════════ LIGHTBOX ═══════════ -->
+<div class="lightbox" id="lightbox" onclick="this.classList.remove('open')">
+  <img id="lightboxImg" src="" alt="Photo">
+</div>
+
+<script>
+/* ================================================================
+   DATA MODEL — Sections, matrix rows, checklist items
+   ================================================================ */
+
+const SECTIONS = [
+  {
+    id: 'pe01',
+    nav: 'PE.01 Risk ID',
+    title: 'PE.01 - Physical Environment Risk Identification & Design Controls',
+    subtitle: 'Safe, Secure, and Functional Care Environment',
+    matrix: [
+      { fgi: '\u00a71.24', req: 'Multidisciplinary Safety Risk Assessment (SRA)', surveyor: 'SRA identifies BH-specific risks (suicide, ligature, elopement)' },
+      { fgi: '\u00a71.24.6', req: 'Behavioral & Mental Health Risk Assessment', surveyor: 'Mitigations are visible in built environment' },
+      { fgi: '\u00a72.5 (entire chapter)', req: 'BH-specific environmental controls', surveyor: 'Unit design matches population acuity' },
+    ],
+    items: [
+      'Documented Behavioral Health SRA (not generic EC risk assessment)',
+      'SRA explicitly addresses adolescent behaviors (impulsivity, climbing, peer harm)',
+      'Risk mitigations embedded in fixtures, furnishings, and layouts',
+      'SRA reviewed when space use, census, or acuity changes',
+    ],
+    evidence: ['SRA report', 'Design narratives / risk mitigation matrix', 'Post-incident reassessments'],
+    insight: 'CMS does not care whether the environment "met FGI at opening." They care whether a foreseeable risk existed at the time of harm.',
+    cmsHooks: ['\u00a7482.13(c)(2) \u2013 Patient Rights (Safety)', '\u00a7482.41(a) \u2013 Safe Environment'],
+  },
+  {
+    id: 'pe02',
+    nav: 'PE.02 Ligature',
+    title: 'PE.02 - Ligature, Self-Harm & Environmental Safety Controls',
+    subtitle: 'Ligature / Suicide Risk',
+    matrix: [
+      { fgi: '\u00a72.18.1', req: 'Tamper & ligature-resistant building systems', surveyor: 'No anchor points in patient-accessible areas' },
+      { fgi: '\u00a72.58.1', req: 'Anti-ligature fixtures & hardware', surveyor: 'Consistency (no mixing BH + med-surg hardware)' },
+      { fgi: '\u00a72.17.2.2', req: 'Doors, windows, hardware', surveyor: 'Emergency access + patient safety' },
+    ],
+    items: [
+      'Ligature risk assessed room-by-room, not unit-level only',
+      'Fixtures (lighting, sprinklers, HVAC grilles) are BH-rated',
+      'Bathroom doors swing out or have staff override',
+      'No patient-accessible plumbing, rails, or door hardware that could serve as anchor points',
+      'Furniture is weighted, fixed, or anti-lift',
+      'Consistent hardware from room to room (no mixing BH + med-surg)',
+      '"Temporary fixes" or retrofits are formally documented with equivalency decisions',
+    ],
+    evidence: ['Ligature risk assessment', 'Manufacturer cut sheets', 'Observation mitigation policies'],
+    insight: 'CMS does not care whether the environment "met FGI at opening." They care whether a foreseeable risk existed at the time of harm. Inconsistent hardware from room to room is a common finding trigger.',
+    cmsHooks: ['\u00a7482.13(c)(2) \u2013 Patient Rights (Safety)', '\u00a7482.41(a) \u2013 Safe Environment', '\u00a7482.41(d) \u2013 Maintenance'],
+  },
+  {
+    id: 'pe03',
+    nav: 'PE.03 Observation',
+    title: 'PE.03 - Observation, Visibility & Human Factors',
+    subtitle: 'Observation & Staffing Dependency',
+    matrix: [
+      { fgi: '\u00a72.12.8.2', req: 'Nurse station location', surveyor: 'Line-of-sight to risk areas' },
+      { fgi: '\u00a72.52.2', req: 'Patient unit layout', surveyor: 'Elimination of blind spots' },
+      { fgi: '\u00a71.25', req: 'Environment of Care elements', surveyor: 'Visibility supports monitoring model' },
+    ],
+    items: [
+      'Observation strategy documented (direct, indirect, electronic)',
+      'No unmitigated blind corners in corridors, lounges, dining',
+      'Mirrors/cameras justified by SRA',
+      'Lighting supports observation without glare or shadowing',
+      'Design supports staffing realities (not reliant on staffing to offset environmental risk)',
+      'Line-of-sight maps maintained and current',
+    ],
+    evidence: ['Observation policy', 'Floor plans marked with observation zones', 'Staff competency records'],
+    insight: 'CMS will cite environmental deficiencies as nursing failures when staffing is used as the mitigation. Blind spots linked to incidents are a primary finding trigger.',
+    cmsHooks: ['\u00a7482.23(b) \u2013 Nursing Care', '\u00a7482.41(a) \u2013 Safe Environment', '\u00a7482.12(a) \u2013 Governing Body'],
+  },
+  {
+    id: 'pe04',
+    nav: 'PE.04 Seclusion',
+    title: 'PE.04 - Special Risk Spaces (Seclusion & De-escalation)',
+    subtitle: 'Seclusion & De-escalation Spaces',
+    matrix: [
+      { fgi: '\u00a72.12.4.3', req: 'Seclusion rooms', surveyor: 'Size, durability, observation' },
+      { fgi: '\u00a72.52.2.4', req: 'Quiet / calming rooms', surveyor: 'De-escalation without restraint' },
+      { fgi: '\u00a72.17.2.3', req: 'Surfaces & ceilings', surveyor: 'Impact-resistant, monolithic' },
+    ],
+    items: [
+      'Seclusion rooms provided per bed count (1 per 24 beds)',
+      'Minimum 60 SF clear floor area in seclusion rooms',
+      'Out-swing doors with view panels',
+      'No receptacles or switches inside seclusion rooms',
+      'Ceilings are monolithic, ligature-safe',
+      'Quiet / calming rooms available as de-escalation alternative',
+      'Surfaces are impact-resistant and durable (damage creates new anchor points)',
+    ],
+    evidence: ['Room inventory list', 'Finish schedules', 'Behavioral health restraint/seclusion policy'],
+    insight: 'CMS increasingly links environmental inadequacy to improper restraint use. No appropriate de-escalation space is a finding trigger.',
+    cmsHooks: ['\u00a7482.13(e) \u2013 Restraint & Seclusion', '\u00a7482.41(a) \u2013 Safe Environment', '\u00a7482.41(d) \u2013 Maintenance'],
+  },
+  {
+    id: 'pe05',
+    nav: 'PE.05 Utilities',
+    title: 'PE.05 - Building Systems Reliability & Control',
+    subtitle: 'Utilities, HVAC & Hidden Risks',
+    matrix: [
+      { fgi: '\u00a71.28', req: 'Commissioning', surveyor: 'Systems perform as designed' },
+      { fgi: '\u00a72.18.2', req: 'HVAC (ASHRAE 170)', surveyor: 'Airflow, access control' },
+      { fgi: '\u00a72.18.3', req: 'Electrical', surveyor: 'Tamper-resistant devices' },
+    ],
+    items: [
+      'HVAC meets ASHRAE 170 for BH occupancies',
+      'No patient access to mechanical or electrical rooms',
+      'Tamper-resistant receptacles where provided',
+      'Commissioning documentation available and complete',
+      'Temperature complaints trended and addressed (thermal discomfort linked to agitation)',
+    ],
+    evidence: ['Commissioning reports', 'PM records', 'BAS screenshots / trend logs'],
+    insight: 'CMS often cites secondary physiological stressors (noise, heat, lighting) in BH harm investigations. Incomplete commissioning is a finding trigger.',
+    cmsHooks: ['\u00a7482.41(a) \u2013 Safe Environment', '\u00a7482.41(d) \u2013 Maintenance'],
+  },
+  {
+    id: 'pe06',
+    nav: 'PE.06 Security',
+    title: 'PE.06 - Security, Elopement & Staff Safety',
+    subtitle: 'Security, Elopement & Wandering',
+    matrix: [
+      { fgi: '\u00a71.24.8', req: 'Security risk assessment', surveyor: 'Elopement mitigation' },
+      { fgi: '\u00a72.52.2.1', req: 'Controlled unit access', surveyor: 'Sally ports where justified' },
+      { fgi: '\u00a72.18.7.4', req: 'Staff duress alarms', surveyor: 'Staff protection' },
+    ],
+    items: [
+      'Controlled access at all BH unit entry points',
+      'Delayed egress or sally ports justified by SRA',
+      'Secure outdoor areas (anti-climb, ligature-safe)',
+      'Wearable staff duress system for all unit staff',
+      'Duress alarms monitored 24/7',
+      'Access control logic consistent across all doors',
+      'Risk assessment updated post-elopement events',
+    ],
+    evidence: ['Security risk assessment', 'Door hardware schedules', 'Duress alarm testing logs'],
+    insight: 'Elopement = environment failure under CMS, even if the door "functioned as designed." Delayed response to violence is a finding trigger.',
+    cmsHooks: ['\u00a7482.41(a) \u2013 Safe Environment', '\u00a7482.13(c) \u2013 Patient Rights'],
+  },
+  {
+    id: 'ls',
+    nav: 'Life Safety',
+    title: 'Life Safety (LS) - Integrated View',
+    subtitle: 'Life Safety vs. Ligature (The Collision Zone)',
+    matrix: [
+      { fgi: 'NFPA cross-refs throughout FGI', req: 'Balance egress with ligature', surveyor: 'Pre-approved equivalencies' },
+      { fgi: '\u00a72.17', req: 'Doors & hardware', surveyor: 'A360 looks for systemic logic' },
+      { fgi: '\u00a71.16', req: 'Equivalency', surveyor: 'CMS will ask for rationale' },
+    ],
+    items: [
+      'BH ligature mitigation does not compromise egress',
+      'Doors required for ligature mitigation still meet NFPA 101',
+      'Life Safety drawings reflect actual built condition',
+      'Fire alarm/sprinkler heads are ligature-resistant in patient areas',
+      'Staff can explain door function and design intent',
+      'Equivalency decisions documented and approved by governing body',
+    ],
+    evidence: ['Life Safety Plans', 'ILSM documentation (if applicable)', 'Fire system shop drawings'],
+    insight: 'Unexplained equivalency = citation risk, even if technically compliant. Staff unable to explain door function is a common finding trigger.',
+    cmsHooks: ['\u00a7482.41(b) \u2013 Life Safety', '\u00a7482.41(a) \u2013 Safe Environment', '\u00a7482.12(a) \u2013 Governing Body'],
+  },
+  {
+    id: 'em',
+    nav: 'Emergency Mgmt',
+    title: 'Emergency Management (EM) - Environment Resilience',
+    subtitle: 'Mapped from FGI \u00a71.24.9 (DEVA)',
+    matrix: [],
+    items: [
+      'Disaster & vulnerability assessment considers BH patients (adolescent-specific needs)',
+      'Shelter-in-place designs suitable for adolescents',
+      'Emergency power supports observation, security, HVAC',
+      'Ligature protections maintained during emergency modes',
+    ],
+    evidence: ['HVA documents', 'Emergency power test results', 'Drill after-action reports'],
+    insight: 'Ligature protections must be maintained even during emergency modes. BH-specific patient needs must be reflected in emergency planning.',
+    cmsHooks: [],
+  },
+  {
+    id: 'gov',
+    nav: 'Governance',
+    title: 'Documentation & Governance',
+    subtitle: 'Where CMS Lands Hardest',
+    matrix: [
+      { fgi: '\u00a71.13', req: 'Long-range improvement', surveyor: 'Risk trend management' },
+      { fgi: '\u00a71.29', req: 'Record documents', surveyor: 'Traceability over time' },
+      { fgi: '\u00a71.24', req: 'SRA lifecycle', surveyor: 'System accountability' },
+    ],
+    items: [
+      'Board-visible tracking of recurring environment-related events',
+      'Physical environment "design memory" maintained (original design intent documented)',
+      'PE risks tied into QAPI program with feedback loop',
+      'Post-incident reassessments documented and acted upon',
+      'SRA lifecycle management (not static, not generic, not outdated)',
+    ],
+    evidence: ['Board risk summaries', 'QAPI meeting minutes referencing PE', 'Design intent documentation', 'Post-incident environment reassessment records'],
+    insight: 'CMS rarely cites one isolated issue \u2014 they cite failure of the system to learn. Repeated similar events without systemic response is a primary trigger.',
+    cmsHooks: ['\u00a7482.12(a) \u2013 Governing Body', '\u00a7482.41(d) \u2013 Maintenance', '\u00a7482.21 \u2013 QAPI'],
+  },
+];
+
+/* ================================================================
+   STATE
+   ================================================================ */
+let state = {
+  info: {},
+  docs: {},
+  items: {},   // key: sectionId-itemIdx -> { status, notes, photos:[] }
+};
+
+/* ================================================================
+   INIT
+   ================================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('assessmentDate').value = new Date().toISOString().slice(0,10);
+  buildNav();
+  buildSectionPanels();
+  loadFromLocal(true);
+});
+
+function buildNav() {
+  const bar = document.getElementById('navBar');
+  const tabs = [
+    { id: 'info', label: 'Setup' },
+    ...SECTIONS.map(s => ({ id: s.id, label: s.nav })),
+    { id: 'report', label: 'Report' },
+  ];
+  tabs.forEach((t, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn' + (i === 0 ? ' active' : '');
+    btn.dataset.panel = t.id;
+    btn.innerHTML = t.label + ' <span class="badge empty" id="badge-' + t.id + '"></span>';
+    btn.onclick = () => switchPanel(t.id);
+    bar.appendChild(btn);
+  });
+}
+
+function switchPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.panel === id);
+  });
+  if (id === 'report') generateReport();
+  updateBadges();
+}
+
+/* ================================================================
+   BUILD SECTION PANELS
+   ================================================================ */
+function buildSectionPanels() {
+  SECTIONS.forEach(sec => {
+    const panel = document.getElementById('panel-' + sec.id);
+    let html = '';
+
+    // Header card
+    html += '<div class="card"><h2>' + sec.title + '</h2>';
+    html += '<div class="section-info"><strong>A360 Domain:</strong> ' + sec.subtitle + '</div>';
+
+    // CMS hooks
+    if (sec.cmsHooks.length) {
+      html += '<div style="margin-bottom:8px"><strong style="font-size:.78rem;color:var(--danger)">CMS CoP Hooks:</strong> ';
+      html += sec.cmsHooks.map(h => '<span style="font-size:.75rem;background:#fdecea;padding:2px 6px;border-radius:4px;margin:2px;display:inline-block">' + h + '</span>').join(' ');
+      html += '</div>';
+    }
+
+    // Matrix
+    if (sec.matrix.length) {
+      html += '<table class="matrix-table"><thead><tr><th>FGI Source</th><th>Requirement</th><th>Surveyor Looks For</th></tr></thead><tbody>';
+      sec.matrix.forEach(r => {
+        html += '<tr><td>' + r.fgi + '</td><td>' + r.req + '</td><td>' + r.surveyor + '</td></tr>';
+      });
+      html += '</tbody></table>';
+    }
+
+    // Insight
+    if (sec.insight) {
+      html += '<div class="key-insight"><strong>Key Insight:</strong> ' + sec.insight + '</div>';
+    }
+    html += '</div>';
+
+    // Checklist items
+    html += '<div class="card"><h2>Assessment Checklist</h2>';
+    sec.items.forEach((item, idx) => {
+      const key = sec.id + '-' + idx;
+      html += buildChecklistItemHTML(key, item);
+    });
+
+    // Evidence
+    html += '<h3>Required Evidence / Documentation</h3>';
+    html += '<ul class="evidence-list">';
+    sec.evidence.forEach(e => { html += '<li>' + e + '</li>'; });
+    html += '</ul>';
+    html += '</div>';
+
+    panel.innerHTML = html;
+  });
+}
+
+function buildChecklistItemHTML(key, text) {
+  return `
+  <div class="checklist-item" id="ci-${key}">
+    <div class="item-text">${text}</div>
+    <div class="status-row">
+      <button class="status-btn" onclick="setItemStatus('${key}','compliant',this)">Compliant</button>
+      <button class="status-btn" onclick="setItemStatus('${key}','non-compliant',this)">Non-Compliant</button>
+      <button class="status-btn" onclick="setItemStatus('${key}','needs-review',this)">Needs Review</button>
+      <button class="status-btn" onclick="setItemStatus('${key}','na',this)">N/A</button>
+    </div>
+    <textarea class="notes-input" placeholder="Observation notes..." oninput="setItemNotes('${key}',this.value)" id="notes-${key}"></textarea>
+    <div class="photo-section">
+      <label class="photo-btn" for="photo-${key}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M5 3v-1M19 3v-1"/></svg>
+        Add Photo
+      </label>
+      <input type="file" id="photo-${key}" accept="image/*" capture="environment" style="display:none" onchange="addPhoto('${key}',event)" multiple>
+      <div class="photo-grid" id="photos-${key}"></div>
+    </div>
+  </div>`;
+}
+
+/* ================================================================
+   ITEM STATUS & NOTES
+   ================================================================ */
+function setItemStatus(key, status, btn) {
+  if (!state.items[key]) state.items[key] = { status: '', notes: '', photos: [] };
+  // Toggle off if same status clicked
+  if (state.items[key].status === status) {
+    state.items[key].status = '';
+    status = '';
+  } else {
+    state.items[key].status = status;
+  }
+  // Update UI
+  const row = btn.parentElement;
+  row.querySelectorAll('.status-btn').forEach(b => {
+    b.className = 'status-btn';
+  });
+  if (status) btn.className = 'status-btn selected-' + status;
+
+  const ci = document.getElementById('ci-' + key);
+  ci.className = 'checklist-item' + (status ? ' status-' + status : '');
+  updateBadges();
+  autoSave();
+}
+
+function setItemNotes(key, val) {
+  if (!state.items[key]) state.items[key] = { status: '', notes: '', photos: [] };
+  state.items[key].notes = val;
+  autoSave();
+}
+
+function setDocStatus(docId, status, btn) {
+  state.docs[docId] = state.docs[docId] || {};
+  if (state.docs[docId].status === status) {
+    state.docs[docId].status = '';
+    status = '';
+  } else {
+    state.docs[docId].status = status;
+  }
+  const row = btn.parentElement;
+  row.querySelectorAll('.status-btn').forEach(b => b.className = 'status-btn');
+  if (status) {
+    const cls = status === 'available' ? 'selected-compliant' : status === 'outdated' ? 'selected-needs-review' : 'selected-non-compliant';
+    btn.className = 'status-btn ' + cls;
+  }
+  autoSave();
+}
+
+/* ================================================================
+   PHOTO HANDLING
+   ================================================================ */
+function addPhoto(key, event) {
+  if (!state.items[key]) state.items[key] = { status: '', notes: '', photos: [] };
+  const files = event.target.files;
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      // Resize for storage efficiency
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX = 1200;
+        let w = img.width, h = img.height;
+        if (w > MAX || h > MAX) {
+          if (w > h) { h = h * MAX / w; w = MAX; }
+          else { w = w * MAX / h; h = MAX; }
+        }
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+        state.items[key].photos.push(dataUrl);
+        renderPhotos(key);
+        autoSave();
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+  event.target.value = '';
+}
+
+function renderPhotos(key) {
+  const grid = document.getElementById('photos-' + key);
+  if (!grid) return;
+  const photos = (state.items[key] && state.items[key].photos) || [];
+  grid.innerHTML = photos.map((p, i) => `
+    <div class="photo-thumb">
+      <img src="${p}" onclick="openLightbox('${p}')" alt="Photo ${i+1}">
+      <button class="remove-photo" onclick="removePhoto('${key}',${i})">&times;</button>
+    </div>
+  `).join('');
+}
+
+function removePhoto(key, idx) {
+  state.items[key].photos.splice(idx, 1);
+  renderPhotos(key);
+  autoSave();
+}
+
+function openLightbox(src) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+
+/* ================================================================
+   BADGES
+   ================================================================ */
+function updateBadges() {
+  SECTIONS.forEach(sec => {
+    const total = sec.items.length;
+    let done = 0;
+    sec.items.forEach((_, idx) => {
+      const key = sec.id + '-' + idx;
+      if (state.items[key] && state.items[key].status) done++;
+    });
+    const badge = document.getElementById('badge-' + sec.id);
+    if (!badge) return;
+    if (done === 0) { badge.className = 'badge empty'; badge.textContent = '0/' + total; }
+    else if (done === total) { badge.className = 'badge complete'; badge.textContent = done + '/' + total; }
+    else { badge.className = 'badge partial'; badge.textContent = done + '/' + total; }
+  });
+}
+
+/* ================================================================
+   SAVE / LOAD
+   ================================================================ */
+let saveTimeout;
+function autoSave() {
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(() => saveToLocal(), 500);
+}
+
+function gatherInfo() {
+  state.info = {
+    facilityName: document.getElementById('facilityName').value,
+    reviewerName: document.getElementById('reviewerName').value,
+    assessmentDate: document.getElementById('assessmentDate').value,
+    unitArea: document.getElementById('unitArea').value,
+    assessmentPurpose: document.getElementById('assessmentPurpose').value,
+  };
+  // Gather doc notes
+  document.querySelectorAll('[data-field]').forEach(el => {
+    state.docs[el.dataset.field] = el.value;
+  });
+}
+
+function saveToLocal() {
+  gatherInfo();
+  try {
+    // Save photos separately to avoid quota issues
+    const saveState = JSON.parse(JSON.stringify(state));
+    localStorage.setItem('bh-assessment', JSON.stringify(saveState));
+  } catch(e) {
+    console.warn('LocalStorage save failed (possibly quota):', e);
+  }
+}
+
+function loadFromLocal(silent) {
+  try {
+    const data = localStorage.getItem('bh-assessment');
+    if (!data) { if (!silent) alert('No saved assessment found.'); return; }
+    state = JSON.parse(data);
+    restoreUI();
+    if (!silent) alert('Assessment loaded successfully.');
+  } catch(e) {
+    if (!silent) alert('Error loading: ' + e.message);
+  }
+}
+
+function restoreUI() {
+  // Info fields
+  if (state.info) {
+    if (state.info.facilityName) document.getElementById('facilityName').value = state.info.facilityName;
+    if (state.info.reviewerName) document.getElementById('reviewerName').value = state.info.reviewerName;
+    if (state.info.assessmentDate) document.getElementById('assessmentDate').value = state.info.assessmentDate;
+    if (state.info.unitArea) document.getElementById('unitArea').value = state.info.unitArea;
+    if (state.info.assessmentPurpose) document.getElementById('assessmentPurpose').value = state.info.assessmentPurpose;
+  }
+
+  // Doc notes
+  if (state.docs) {
+    document.querySelectorAll('[data-field]').forEach(el => {
+      if (state.docs[el.dataset.field]) el.value = state.docs[el.dataset.field];
+    });
+    // Doc statuses
+    ['doc-fp','doc-sra','doc-lra','doc-secra','doc-lsp','doc-cx','doc-hva'].forEach(docId => {
+      if (state.docs[docId] && state.docs[docId].status) {
+        const container = document.getElementById(docId);
+        if (!container) return;
+        const status = state.docs[docId].status;
+        const btns = container.querySelectorAll('.status-btn');
+        btns.forEach(b => {
+          if (b.dataset.status === status) {
+            const cls = status === 'available' ? 'selected-compliant' : status === 'outdated' ? 'selected-needs-review' : 'selected-non-compliant';
+            b.className = 'status-btn ' + cls;
+          }
+        });
+      }
+    });
+  }
+
+  // Checklist items
+  if (state.items) {
+    Object.keys(state.items).forEach(key => {
+      const item = state.items[key];
+      const ci = document.getElementById('ci-' + key);
+      if (!ci) return;
+      if (item.status) {
+        ci.className = 'checklist-item status-' + item.status;
+        const btns = ci.querySelectorAll('.status-btn');
+        btns.forEach(b => {
+          if (b.textContent.toLowerCase().replace(/[\s/-]/g,'') === item.status.replace(/-/g,'')) {
+            b.className = 'status-btn selected-' + item.status;
+          }
+        });
+      }
+      const notes = document.getElementById('notes-' + key);
+      if (notes && item.notes) notes.value = item.notes;
+      renderPhotos(key);
+    });
+  }
+  updateBadges();
+}
+
+/* ================================================================
+   EXPORT / IMPORT JSON
+   ================================================================ */
+function exportJSON() {
+  gatherInfo();
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const fname = (state.info.facilityName || 'assessment').replace(/[^a-z0-9]/gi,'_');
+  a.download = 'BH_Assessment_' + fname + '_' + (state.info.assessmentDate || 'undated') + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importJSON() {
+  document.getElementById('importFile').click();
+}
+
+function handleImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      state = JSON.parse(e.target.result);
+      restoreUI();
+      alert('Assessment imported successfully.');
+    } catch(err) {
+      alert('Error reading file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function clearAll() {
+  if (!confirm('Clear all assessment data? This cannot be undone.')) return;
+  state = { info: {}, docs: {}, items: {} };
+  localStorage.removeItem('bh-assessment');
+  location.reload();
+}
+
+/* ================================================================
+   REPORT GENERATION
+   ================================================================ */
+function generateReport() {
+  gatherInfo();
+  const panel = document.getElementById('panel-report');
+
+  // Summary stats
+  let totalItems = 0, compliant = 0, nonCompliant = 0, needsReview = 0, na = 0, notAssessed = 0;
+  SECTIONS.forEach(sec => {
+    sec.items.forEach((_, idx) => {
+      totalItems++;
+      const key = sec.id + '-' + idx;
+      const s = state.items[key] && state.items[key].status;
+      if (s === 'compliant') compliant++;
+      else if (s === 'non-compliant') nonCompliant++;
+      else if (s === 'needs-review') needsReview++;
+      else if (s === 'na') na++;
+      else notAssessed++;
+    });
+  });
+  const assessed = totalItems - notAssessed - na;
+  const compRate = assessed > 0 ? Math.round(compliant / assessed * 100) : 0;
+
+  let html = '<div class="card"><h2>Assessment Report</h2>';
+  html += '<p style="font-size:.82rem;color:var(--text-light);margin-bottom:4px">';
+  html += '<strong>' + (state.info.facilityName || '(No facility name)') + '</strong>';
+  html += ' &mdash; ' + (state.info.unitArea || '(No unit specified)');
+  html += '<br>Reviewer: ' + (state.info.reviewerName || '(Not specified)');
+  html += ' | Date: ' + (state.info.assessmentDate || '(Not set)');
+  html += ' | Purpose: ' + (state.info.assessmentPurpose || '(Not set)');
+  html += '</p>';
+
+  html += '<div class="stats-grid">';
+  html += statCard(compliant, 'Compliant', 'var(--accent)');
+  html += statCard(nonCompliant, 'Non-Compliant', 'var(--danger)');
+  html += statCard(needsReview, 'Needs Review', 'var(--warning)');
+  html += statCard(na, 'N/A', 'var(--text-light)');
+  html += statCard(notAssessed, 'Not Assessed', 'var(--border)', 'var(--text)');
+  html += '</div>';
+
+  html += '<div class="progress-wrap"><div class="progress-bar"><div class="progress-fill ' + (compRate >= 80 ? 'good' : 'mid') + '" style="width:' + compRate + '%"></div></div>';
+  html += '<div class="progress-label">Compliance Rate: ' + compRate + '% (' + compliant + ' of ' + assessed + ' assessed items)</div></div>';
+  html += '</div>';
+
+  // Document status
+  html += '<div class="card report-section"><h2>Document Verification</h2>';
+  ['doc-fp','doc-sra','doc-lra','doc-secra','doc-lsp','doc-cx','doc-hva'].forEach(docId => {
+    const el = document.getElementById(docId);
+    const label = el ? el.querySelector('.item-text').textContent : docId;
+    const ds = state.docs[docId];
+    const status = ds && ds.status ? ds.status : 'not checked';
+    const notes = state.docs[docId + '-notes'] || '';
+    const badge = status === 'available' ? 'compliant' : status === 'outdated' ? 'needs-review' : status === 'missing' ? 'non-compliant' : 'not-assessed';
+    html += '<div style="padding:4px 0;font-size:.82rem"><span class="finding-badge ' + badge + '">' + status.toUpperCase() + '</span> ' + label;
+    if (notes) html += '<br><span style="color:var(--text-light);font-size:.75rem;margin-left:16px">' + escHtml(notes) + '</span>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // Non-compliant & needs-review findings
+  html += '<div class="card report-section"><h2>Findings Requiring Action</h2>';
+  let hasFindings = false;
+  SECTIONS.forEach(sec => {
+    const findings = [];
+    sec.items.forEach((item, idx) => {
+      const key = sec.id + '-' + idx;
+      const s = state.items[key];
+      if (s && (s.status === 'non-compliant' || s.status === 'needs-review')) {
+        findings.push({ item, ...s, key });
+      }
+    });
+    if (findings.length) {
+      hasFindings = true;
+      html += '<h3>' + sec.title + '</h3>';
+      findings.forEach(f => {
+        html += '<div style="padding:6px 0;border-bottom:1px solid var(--border)">';
+        html += '<span class="finding-badge ' + f.status + '">' + f.status.replace('-',' ').toUpperCase() + '</span> ';
+        html += '<span style="font-size:.82rem">' + escHtml(f.item) + '</span>';
+        if (f.notes) html += '<br><span style="font-size:.78rem;color:var(--text-light);margin-left:16px">Notes: ' + escHtml(f.notes) + '</span>';
+        if (f.photos && f.photos.length) {
+          html += '<div class="photo-grid" style="margin:6px 0 0 16px">';
+          f.photos.forEach(p => {
+            html += '<div class="photo-thumb"><img src="' + p + '" onclick="openLightbox(\'' + p + '\')"></div>';
+          });
+          html += '</div>';
+        }
+        // CMS hooks
+        if (sec.cmsHooks.length) {
+          html += '<div style="font-size:.72rem;color:var(--danger);margin-left:16px;margin-top:4px">CMS refs: ' + sec.cmsHooks.join(', ') + '</div>';
+        }
+        html += '</div>';
+      });
+    }
+  });
+  if (!hasFindings) html += '<p style="font-size:.82rem;color:var(--text-light)">No non-compliant or needs-review findings recorded.</p>';
+  html += '</div>';
+
+  // Full section breakdown
+  html += '<div class="card report-section"><h2>Complete Assessment Detail</h2>';
+  SECTIONS.forEach(sec => {
+    html += '<h3>' + sec.title + '</h3>';
+    sec.items.forEach((item, idx) => {
+      const key = sec.id + '-' + idx;
+      const s = state.items[key] || {};
+      const status = s.status || 'not-assessed';
+      const badgeLabel = status.replace(/-/g,' ').toUpperCase();
+      html += '<div style="padding:4px 0;font-size:.82rem"><span class="finding-badge ' + status + '">' + badgeLabel + '</span> ' + escHtml(item);
+      if (s.notes) html += '<br><span style="color:var(--text-light);font-size:.75rem;margin-left:16px">' + escHtml(s.notes) + '</span>';
+      if (s.photos && s.photos.length) {
+        html += '<div class="photo-grid" style="margin:4px 0 0 16px">';
+        s.photos.forEach(p => {
+          html += '<div class="photo-thumb"><img src="' + p + '" onclick="openLightbox(\'' + p + '\')"></div>';
+        });
+        html += '</div>';
+      }
+      html += '</div>';
+    });
+  });
+  html += '</div>';
+
+  // Print button
+  html += '<div class="no-print" style="text-align:center;margin:16px 0"><button class="btn btn-primary" onclick="window.print()">Print Report</button></div>';
+
+  panel.innerHTML = html;
+}
+
+function statCard(num, label, color, textColor) {
+  return '<div class="stat-card"><div class="stat-num" style="color:' + color + '">' + num + '</div><div class="stat-label"' + (textColor ? ' style="color:' + textColor + '"' : '') + '>' + label + '</div></div>';
+}
+
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>
