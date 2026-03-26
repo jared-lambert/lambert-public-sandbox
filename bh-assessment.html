@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BH Assessment">
 <title>BH Physical Environment Assessment Tool</title>
 <style>
 :root {
@@ -16,16 +19,20 @@
   --text: #2c3e50;
   --text-light: #7f8c8d;
   --border: #dcdde1;
-  --radius: 8px;
+  --radius: 10px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: var(--bg);
   color: var(--text);
-  line-height: 1.5;
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* ── Header ── */
@@ -37,52 +44,66 @@ body {
   top: 0;
   z-index: 100;
   box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.app-header h1 { font-size: 1.1rem; font-weight: 600; }
+.app-header .title-block h1 { font-size: 1.15rem; font-weight: 600; }
 .app-header .subtitle { font-size: .8rem; opacity: .85; margin-top: 2px; }
+.header-progress {
+  text-align: right;
+  min-width: 100px;
+}
+.header-progress .pct { font-size: 1.4rem; font-weight: 700; }
+.header-progress .pct-label { font-size: .7rem; opacity: .8; }
 
 /* ── Navigation ── */
 .nav-bar {
   display: flex;
-  gap: 4px;
+  gap: 6px;
   overflow-x: auto;
-  padding: 8px 12px;
+  padding: 10px 16px;
   background: #fff;
   border-bottom: 1px solid var(--border);
   position: sticky;
-  top: 68px;
+  top: 60px;
   z-index: 99;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
 }
 .nav-btn {
   flex-shrink: 0;
-  padding: 6px 12px;
+  padding: 10px 16px;
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 24px;
   background: #fff;
-  font-size: .75rem;
+  font-size: .85rem;
   cursor: pointer;
   white-space: nowrap;
   transition: all .2s;
+  min-height: 44px;
+  scroll-snap-align: start;
+  touch-action: manipulation;
 }
 .nav-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 .nav-btn .badge {
   display: inline-block;
-  min-width: 16px;
-  height: 16px;
-  line-height: 16px;
+  min-width: 20px;
+  height: 20px;
+  line-height: 20px;
   text-align: center;
-  border-radius: 8px;
-  font-size: .65rem;
+  border-radius: 10px;
+  font-size: .72rem;
   font-weight: 700;
-  margin-left: 4px;
-  padding: 0 4px;
+  margin-left: 6px;
+  padding: 0 5px;
 }
 .nav-btn .badge.complete { background: var(--accent); color: #fff; }
 .nav-btn .badge.partial { background: var(--warning); color: #fff; }
 .nav-btn .badge.empty { background: var(--border); color: var(--text-light); }
 
 /* ── Panels ── */
-.panel { display: none; padding: 16px; max-width: 900px; margin: 0 auto; }
+.panel { display: none; padding: 20px; max-width: 960px; margin: 0 auto; }
 .panel.active { display: block; }
 
 /* ── Cards ── */
@@ -90,20 +111,42 @@ body {
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: 0 1px 4px rgba(0,0,0,.08);
-  padding: 16px;
-  margin-bottom: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
 }
-.card h2 { font-size: 1rem; color: var(--primary); margin-bottom: 8px; }
-.card h3 { font-size: .9rem; color: var(--primary-light); margin: 12px 0 6px; }
+.card h2 { font-size: 1.1rem; color: var(--primary); margin-bottom: 10px; }
+.card h3 { font-size: 1rem; color: var(--primary-light); margin: 14px 0 8px; }
+
+/* ── Collapsible reference ── */
+.ref-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  cursor: pointer;
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--primary-light);
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  touch-action: manipulation;
+  min-height: 44px;
+}
+.ref-toggle .arrow { transition: transform .2s; display: inline-block; }
+.ref-toggle.open .arrow { transform: rotate(90deg); }
+.ref-content { display: none; padding-bottom: 8px; }
+.ref-content.open { display: block; }
 
 /* ── Section info ── */
 .section-info {
   background: #eaf2f8;
   border-left: 4px solid var(--primary-light);
-  padding: 10px 12px;
+  padding: 12px 14px;
   border-radius: 0 var(--radius) var(--radius) 0;
-  margin-bottom: 12px;
-  font-size: .82rem;
+  margin-bottom: 14px;
+  font-size: .88rem;
 }
 .section-info strong { color: var(--primary); }
 
@@ -111,18 +154,18 @@ body {
 .matrix-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: .78rem;
-  margin-bottom: 12px;
+  font-size: .85rem;
+  margin-bottom: 14px;
 }
 .matrix-table th {
   background: var(--primary);
   color: #fff;
-  padding: 8px 6px;
+  padding: 10px 8px;
   text-align: left;
   font-weight: 600;
 }
 .matrix-table td {
-  padding: 6px;
+  padding: 8px;
   border-bottom: 1px solid var(--border);
   vertical-align: top;
 }
@@ -132,33 +175,37 @@ body {
 .checklist-item {
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 12px;
-  margin-bottom: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
   transition: border-color .2s;
 }
-.checklist-item.status-compliant { border-left: 4px solid var(--accent); }
-.checklist-item.status-non-compliant { border-left: 4px solid var(--danger); }
-.checklist-item.status-na { border-left: 4px solid var(--text-light); }
-.checklist-item.status-needs-review { border-left: 4px solid var(--warning); }
+.checklist-item.status-compliant { border-left: 5px solid var(--accent); }
+.checklist-item.status-non-compliant { border-left: 5px solid var(--danger); }
+.checklist-item.status-na { border-left: 5px solid var(--text-light); }
+.checklist-item.status-needs-review { border-left: 5px solid var(--warning); }
 
-.item-text { font-size: .85rem; margin-bottom: 8px; font-weight: 500; }
+.item-text { font-size: .95rem; margin-bottom: 10px; font-weight: 500; }
 
 .status-row {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
 }
 .status-btn {
-  padding: 4px 10px;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  font-size: .72rem;
+  padding: 10px 6px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  font-size: .82rem;
+  font-weight: 600;
   cursor: pointer;
   background: #fff;
   transition: all .15s;
+  min-height: 44px;
+  touch-action: manipulation;
+  text-align: center;
 }
-.status-btn:hover { background: #f0f0f0; }
+.status-btn:active { transform: scale(.96); }
 .status-btn.selected-compliant { background: var(--accent); color: #fff; border-color: var(--accent); }
 .status-btn.selected-non-compliant { background: var(--danger); color: #fff; border-color: var(--danger); }
 .status-btn.selected-na { background: var(--text-light); color: #fff; border-color: var(--text-light); }
@@ -168,39 +215,42 @@ body {
   width: 100%;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 8px;
-  font-size: .8rem;
+  padding: 12px;
+  font-size: .9rem;
   font-family: inherit;
   resize: vertical;
-  min-height: 36px;
+  min-height: 44px;
+  line-height: 1.5;
 }
-.notes-input:focus { outline: none; border-color: var(--primary-light); }
+.notes-input:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(41,128,185,.15); }
 
 /* ── Photo capture ── */
-.photo-section { margin-top: 8px; }
+.photo-section { margin-top: 10px; }
 .photo-btn {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 5px 10px;
-  border: 1px dashed var(--primary-light);
+  gap: 6px;
+  padding: 10px 16px;
+  border: 2px dashed var(--primary-light);
   border-radius: var(--radius);
   background: #eaf2f8;
   color: var(--primary-light);
-  font-size: .75rem;
+  font-size: .85rem;
+  font-weight: 600;
   cursor: pointer;
+  min-height: 44px;
+  touch-action: manipulation;
 }
-.photo-btn:hover { background: #d5e8f7; }
+.photo-btn:active { background: #d5e8f7; }
 .photo-grid {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
 }
 .photo-thumb {
   position: relative;
-  width: 80px;
-  height: 80px;
+  aspect-ratio: 1;
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border);
@@ -208,120 +258,166 @@ body {
 .photo-thumb img { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
 .photo-thumb .remove-photo {
   position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 20px;
-  height: 20px;
+  top: 4px;
+  right: 4px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: rgba(192,57,43,.85);
+  background: rgba(192,57,43,.9);
   color: #fff;
   border: none;
   cursor: pointer;
-  font-size: .7rem;
+  font-size: .85rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  touch-action: manipulation;
 }
 
-/* ── Evidence docs ── */
-.evidence-list {
-  list-style: none;
-  padding: 0;
+/* ── Area photos (section-level) ── */
+.area-photos-card {
+  background: #f0f7ff;
+  border: 2px solid var(--primary-light);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
 }
-.evidence-list li {
-  font-size: .8rem;
-  padding: 3px 0;
+.area-photos-card h2 {
+  color: var(--primary);
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+.area-photos-card .area-desc {
+  font-size: .85rem;
   color: var(--text-light);
+  margin-bottom: 12px;
 }
+.area-photo-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 16px;
+  border: 2px dashed var(--primary-light);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--primary-light);
+  font-size: .95rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 56px;
+  touch-action: manipulation;
+}
+.area-photo-btn:active { background: #eaf2f8; }
+.area-photo-btn svg { flex-shrink: 0; }
+.area-notes {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  font-size: .9rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 44px;
+  margin-top: 10px;
+}
+.area-notes:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(41,128,185,.15); }
+
+/* ── Evidence docs ── */
+.evidence-list { list-style: none; padding: 0; }
+.evidence-list li { font-size: .88rem; padding: 4px 0; color: var(--text-light); }
 .evidence-list li::before { content: "\1F4C1 "; }
 
 /* ── Key Insight ── */
 .key-insight {
   background: #fef9e7;
   border-left: 4px solid #f1c40f;
-  padding: 8px 12px;
+  padding: 10px 14px;
   border-radius: 0 var(--radius) var(--radius) 0;
-  font-size: .8rem;
-  margin: 8px 0;
+  font-size: .88rem;
+  margin: 10px 0;
 }
 
 /* ── Form fields ── */
-.form-group { margin-bottom: 12px; }
-.form-group label { display: block; font-size: .8rem; font-weight: 600; margin-bottom: 4px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: .9rem; font-weight: 600; margin-bottom: 6px; }
 .form-input {
   width: 100%;
-  padding: 8px;
+  padding: 12px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  font-size: .85rem;
+  font-size: .95rem;
   font-family: inherit;
+  min-height: 44px;
 }
-.form-input:focus { outline: none; border-color: var(--primary-light); }
+.form-input:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(41,128,185,.15); }
 
 /* ── Buttons ── */
 .btn {
-  padding: 10px 20px;
+  padding: 12px 22px;
   border: none;
   border-radius: var(--radius);
-  font-size: .85rem;
+  font-size: .9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all .2s;
+  min-height: 48px;
+  touch-action: manipulation;
 }
+.btn:active { transform: scale(.97); }
 .btn-primary { background: var(--primary); color: #fff; }
-.btn-primary:hover { background: var(--primary-light); }
 .btn-accent { background: var(--accent); color: #fff; }
-.btn-accent:hover { opacity: .9; }
 .btn-outline { background: #fff; border: 1px solid var(--border); color: var(--text); }
-.btn-outline:hover { background: var(--bg); }
 .btn-danger { background: var(--danger); color: #fff; }
 
 /* ── Progress bar ── */
-.progress-wrap { margin: 8px 0; }
+.progress-wrap { margin: 10px 0; }
 .progress-bar {
-  height: 6px;
+  height: 8px;
   background: var(--border);
-  border-radius: 3px;
+  border-radius: 4px;
   overflow: hidden;
 }
 .progress-fill {
   height: 100%;
-  border-radius: 3px;
+  border-radius: 4px;
   transition: width .3s;
 }
 .progress-fill.good { background: var(--accent); }
 .progress-fill.mid { background: var(--warning); }
-.progress-label { font-size: .72rem; color: var(--text-light); margin-top: 2px; }
+.progress-label { font-size: .8rem; color: var(--text-light); margin-top: 4px; }
 
 /* ── Summary stats ── */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 10px;
-  margin-bottom: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
 }
 .stat-card {
   text-align: center;
-  padding: 12px;
+  padding: 14px;
   border-radius: var(--radius);
   background: #fff;
   box-shadow: 0 1px 4px rgba(0,0,0,.08);
 }
-.stat-num { font-size: 1.5rem; font-weight: 700; }
-.stat-label { font-size: .72rem; color: var(--text-light); }
+.stat-num { font-size: 1.6rem; font-weight: 700; }
+.stat-label { font-size: .78rem; color: var(--text-light); }
 
 /* ── Actions bar ── */
 .actions-bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  flex-wrap: wrap;
-  padding: 12px 16px;
+  padding: 14px 20px;
+  padding-bottom: max(14px, env(safe-area-inset-bottom));
   background: #fff;
   border-top: 1px solid var(--border);
   position: sticky;
   bottom: 0;
   z-index: 99;
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
 }
 
@@ -330,7 +426,7 @@ body {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.85);
+  background: rgba(0,0,0,.9);
   z-index: 200;
   align-items: center;
   justify-content: center;
@@ -338,14 +434,40 @@ body {
 }
 .lightbox.open { display: flex; }
 .lightbox img { max-width: 95vw; max-height: 95vh; border-radius: var(--radius); }
+.lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  color: #fff;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+}
+
+/* ── Section nav arrows ── */
+.section-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+  gap: 12px;
+}
+.section-nav .btn { flex: 1; text-align: center; }
 
 /* ── Report view ── */
 .report-section { page-break-inside: avoid; margin-bottom: 20px; }
 .finding-badge {
   display: inline-block;
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-size: .7rem;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: .78rem;
   font-weight: 700;
   color: #fff;
 }
@@ -355,21 +477,38 @@ body {
 .finding-badge.na { background: var(--text-light); }
 .finding-badge.not-assessed { background: var(--border); color: var(--text); }
 
+/* ── iPad landscape optimization ── */
+@media (min-width: 768px) {
+  .panel { padding: 24px 32px; }
+  .card { padding: 24px; }
+  .status-row { grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .photo-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+  .actions-bar { grid-template-columns: repeat(6, 1fr); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+}
+
 @media print {
-  .app-header, .nav-bar, .actions-bar, .no-print { display: none !important; }
+  .app-header, .nav-bar, .actions-bar, .no-print, .section-nav { display: none !important; }
   .panel { display: block !important; max-width: 100%; }
   .panel:not(#panel-report) { display: none !important; }
   #panel-report { display: block !important; }
   .card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
-  body { background: #fff; }
+  body { background: #fff; font-size: 11pt; }
+  .photo-thumb { width: 100px; height: 100px; }
 }
 </style>
 </head>
 <body>
 
 <header class="app-header">
-  <h1>Behavioral Health Physical Environment Assessment</h1>
-  <div class="subtitle">FGI 2026 Draft &times; Joint Commission A360 &times; CMS CoPs</div>
+  <div class="title-block">
+    <h1>BH Physical Environment Assessment</h1>
+    <div class="subtitle">FGI 2026 &times; Joint Commission A360 &times; CMS CoPs</div>
+  </div>
+  <div class="header-progress">
+    <div class="pct" id="headerPct">0%</div>
+    <div class="pct-label">assessed</div>
+  </div>
 </header>
 
 <nav class="nav-bar" id="navBar"></nav>
@@ -378,21 +517,25 @@ body {
 <div class="panel active" id="panel-info">
   <div class="card">
     <h2>Assessment Information</h2>
-    <div class="form-group">
-      <label>Facility Name</label>
-      <input class="form-input" id="facilityName" placeholder="e.g., Sunrise Adolescent BH Hospital">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Facility Name</label>
+        <input class="form-input" id="facilityName" placeholder="e.g., Sunrise Adolescent BH Hospital">
+      </div>
+      <div class="form-group">
+        <label>Surveyor / Reviewer Name</label>
+        <input class="form-input" id="reviewerName" placeholder="Your name">
+      </div>
     </div>
-    <div class="form-group">
-      <label>Surveyor / Reviewer Name</label>
-      <input class="form-input" id="reviewerName" placeholder="Your name">
-    </div>
-    <div class="form-group">
-      <label>Assessment Date</label>
-      <input class="form-input" type="date" id="assessmentDate">
-    </div>
-    <div class="form-group">
-      <label>Unit / Area Being Assessed</label>
-      <input class="form-input" id="unitArea" placeholder="e.g., Unit 2A — Adolescent Acute">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Assessment Date</label>
+        <input class="form-input" type="date" id="assessmentDate">
+      </div>
+      <div class="form-group">
+        <label>Unit / Area Being Assessed</label>
+        <input class="form-input" id="unitArea" placeholder="e.g., Unit 2A — Adolescent Acute">
+      </div>
     </div>
     <div class="form-group">
       <label>Assessment Purpose</label>
@@ -410,11 +553,11 @@ body {
 
   <div class="card">
     <h2>Required Documents Verification</h2>
-    <p style="font-size:.82rem;color:var(--text-light);margin-bottom:12px">Before beginning the physical tour, verify the following documents are available and current.</p>
+    <p style="font-size:.88rem;color:var(--text-light);margin-bottom:14px">Before beginning the physical tour, verify the following documents are available and current.</p>
 
     <div class="checklist-item" id="doc-fp">
       <div class="item-text">Functional Program (FP)</div>
-      <div class="status-row">
+      <div class="status-row" style="grid-template-columns:repeat(3,1fr)">
         <button class="status-btn" data-status="available" onclick="setDocStatus('doc-fp','available',this)">Available</button>
         <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-fp','outdated',this)">Outdated</button>
         <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-fp','missing',this)">Missing</button>
@@ -424,17 +567,17 @@ body {
 
     <div class="checklist-item" id="doc-sra">
       <div class="item-text">Safety Risk Assessment (SRA) - Behavioral Health Specific</div>
-      <div class="status-row">
+      <div class="status-row" style="grid-template-columns:repeat(3,1fr)">
         <button class="status-btn" data-status="available" onclick="setDocStatus('doc-sra','available',this)">Available</button>
         <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-sra','outdated',this)">Outdated</button>
         <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-sra','missing',this)">Missing</button>
       </div>
-      <textarea class="notes-input" placeholder="Notes (date, scope of assessment, responsible party)" data-field="doc-sra-notes"></textarea>
+      <textarea class="notes-input" placeholder="Notes (date, scope, responsible party)" data-field="doc-sra-notes"></textarea>
     </div>
 
     <div class="checklist-item" id="doc-lra">
       <div class="item-text">Ligature Risk Assessment (room-by-room)</div>
-      <div class="status-row">
+      <div class="status-row" style="grid-template-columns:repeat(3,1fr)">
         <button class="status-btn" data-status="available" onclick="setDocStatus('doc-lra','available',this)">Available</button>
         <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-lra','outdated',this)">Outdated</button>
         <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-lra','missing',this)">Missing</button>
@@ -444,7 +587,7 @@ body {
 
     <div class="checklist-item" id="doc-secra">
       <div class="item-text">Security Risk Assessment</div>
-      <div class="status-row">
+      <div class="status-row" style="grid-template-columns:repeat(3,1fr)">
         <button class="status-btn" data-status="available" onclick="setDocStatus('doc-secra','available',this)">Available</button>
         <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-secra','outdated',this)">Outdated</button>
         <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-secra','missing',this)">Missing</button>
@@ -454,7 +597,7 @@ body {
 
     <div class="checklist-item" id="doc-lsp">
       <div class="item-text">Life Safety Plans (current as-built)</div>
-      <div class="status-row">
+      <div class="status-row" style="grid-template-columns:repeat(3,1fr)">
         <button class="status-btn" data-status="available" onclick="setDocStatus('doc-lsp','available',this)">Available</button>
         <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-lsp','outdated',this)">Outdated</button>
         <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-lsp','missing',this)">Missing</button>
@@ -464,7 +607,7 @@ body {
 
     <div class="checklist-item" id="doc-cx">
       <div class="item-text">Commissioning Reports</div>
-      <div class="status-row">
+      <div class="status-row" style="grid-template-columns:repeat(3,1fr)">
         <button class="status-btn" data-status="available" onclick="setDocStatus('doc-cx','available',this)">Available</button>
         <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-cx','outdated',this)">Outdated</button>
         <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-cx','missing',this)">Missing</button>
@@ -474,13 +617,18 @@ body {
 
     <div class="checklist-item" id="doc-hva">
       <div class="item-text">Hazard Vulnerability Assessment (HVA)</div>
-      <div class="status-row">
+      <div class="status-row" style="grid-template-columns:repeat(3,1fr)">
         <button class="status-btn" data-status="available" onclick="setDocStatus('doc-hva','available',this)">Available</button>
         <button class="status-btn" data-status="outdated" onclick="setDocStatus('doc-hva','outdated',this)">Outdated</button>
         <button class="status-btn" data-status="missing" onclick="setDocStatus('doc-hva','missing',this)">Missing</button>
       </div>
       <textarea class="notes-input" placeholder="Notes" data-field="doc-hva-notes"></textarea>
     </div>
+  </div>
+
+  <div class="section-nav">
+    <div></div>
+    <button class="btn btn-primary" onclick="goNext('info')">Begin Assessment &rarr;</button>
   </div>
 </div>
 
@@ -500,31 +648,32 @@ body {
 
 <!-- ═══════════ ACTIONS BAR ═══════════ -->
 <div class="actions-bar no-print">
-  <button class="btn btn-primary" onclick="saveToLocal()">Save Progress</button>
-  <button class="btn btn-outline" onclick="loadFromLocal()">Load Saved</button>
-  <button class="btn btn-accent" onclick="generateReport()">Generate Report</button>
-  <button class="btn btn-outline" onclick="exportJSON()">Export JSON</button>
-  <button class="btn btn-outline" onclick="importJSON()">Import JSON</button>
-  <button class="btn btn-danger" onclick="clearAll()">Clear All</button>
+  <button class="btn btn-primary" onclick="saveToLocal()">Save</button>
+  <button class="btn btn-outline" onclick="loadFromLocal()">Load</button>
+  <button class="btn btn-accent" onclick="switchPanel('report')">Report</button>
+  <button class="btn btn-outline" onclick="exportJSON()">Export</button>
+  <button class="btn btn-outline" onclick="importJSON()">Import</button>
+  <button class="btn btn-danger" onclick="clearAll()">Clear</button>
   <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
 </div>
 
 <!-- ═══════════ LIGHTBOX ═══════════ -->
-<div class="lightbox" id="lightbox" onclick="this.classList.remove('open')">
-  <img id="lightboxImg" src="" alt="Photo">
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox(event)">&times;</button>
+  <img id="lightboxImg" src="" alt="Photo" onclick="closeLightbox(event)">
 </div>
 
 <script>
 /* ================================================================
-   DATA MODEL — Sections, matrix rows, checklist items
+   DATA MODEL
    ================================================================ */
-
 const SECTIONS = [
   {
     id: 'pe01',
     nav: 'PE.01 Risk ID',
     title: 'PE.01 - Physical Environment Risk Identification & Design Controls',
     subtitle: 'Safe, Secure, and Functional Care Environment',
+    areaPhotoPrompt: 'Photograph the overall unit layout, entry points, and any visible risk assessment postings.',
     matrix: [
       { fgi: '\u00a71.24', req: 'Multidisciplinary Safety Risk Assessment (SRA)', surveyor: 'SRA identifies BH-specific risks (suicide, ligature, elopement)' },
       { fgi: '\u00a71.24.6', req: 'Behavioral & Mental Health Risk Assessment', surveyor: 'Mitigations are visible in built environment' },
@@ -545,6 +694,7 @@ const SECTIONS = [
     nav: 'PE.02 Ligature',
     title: 'PE.02 - Ligature, Self-Harm & Environmental Safety Controls',
     subtitle: 'Ligature / Suicide Risk',
+    areaPhotoPrompt: 'Photograph fixtures, door hardware, sprinkler heads, HVAC grilles, plumbing, and any potential anchor points in patient rooms and bathrooms.',
     matrix: [
       { fgi: '\u00a72.18.1', req: 'Tamper & ligature-resistant building systems', surveyor: 'No anchor points in patient-accessible areas' },
       { fgi: '\u00a72.58.1', req: 'Anti-ligature fixtures & hardware', surveyor: 'Consistency (no mixing BH + med-surg hardware)' },
@@ -568,6 +718,7 @@ const SECTIONS = [
     nav: 'PE.03 Observation',
     title: 'PE.03 - Observation, Visibility & Human Factors',
     subtitle: 'Observation & Staffing Dependency',
+    areaPhotoPrompt: 'Photograph nurse station sightlines, corridor views, blind spots, mirrors/cameras, and lighting conditions.',
     matrix: [
       { fgi: '\u00a72.12.8.2', req: 'Nurse station location', surveyor: 'Line-of-sight to risk areas' },
       { fgi: '\u00a72.52.2', req: 'Patient unit layout', surveyor: 'Elimination of blind spots' },
@@ -590,6 +741,7 @@ const SECTIONS = [
     nav: 'PE.04 Seclusion',
     title: 'PE.04 - Special Risk Spaces (Seclusion & De-escalation)',
     subtitle: 'Seclusion & De-escalation Spaces',
+    areaPhotoPrompt: 'Photograph seclusion rooms (door, ceiling, walls, floor), quiet/calming rooms, and surface conditions.',
     matrix: [
       { fgi: '\u00a72.12.4.3', req: 'Seclusion rooms', surveyor: 'Size, durability, observation' },
       { fgi: '\u00a72.52.2.4', req: 'Quiet / calming rooms', surveyor: 'De-escalation without restraint' },
@@ -613,6 +765,7 @@ const SECTIONS = [
     nav: 'PE.05 Utilities',
     title: 'PE.05 - Building Systems Reliability & Control',
     subtitle: 'Utilities, HVAC & Hidden Risks',
+    areaPhotoPrompt: 'Photograph mechanical/electrical room access points, receptacles, HVAC grilles, and any tamper-resistant devices.',
     matrix: [
       { fgi: '\u00a71.28', req: 'Commissioning', surveyor: 'Systems perform as designed' },
       { fgi: '\u00a72.18.2', req: 'HVAC (ASHRAE 170)', surveyor: 'Airflow, access control' },
@@ -634,6 +787,7 @@ const SECTIONS = [
     nav: 'PE.06 Security',
     title: 'PE.06 - Security, Elopement & Staff Safety',
     subtitle: 'Security, Elopement & Wandering',
+    areaPhotoPrompt: 'Photograph entry/exit access controls, sally ports, outdoor areas (fencing, anti-climb), and staff duress alarm devices.',
     matrix: [
       { fgi: '\u00a71.24.8', req: 'Security risk assessment', surveyor: 'Elopement mitigation' },
       { fgi: '\u00a72.52.2.1', req: 'Controlled unit access', surveyor: 'Sally ports where justified' },
@@ -657,6 +811,7 @@ const SECTIONS = [
     nav: 'Life Safety',
     title: 'Life Safety (LS) - Integrated View',
     subtitle: 'Life Safety vs. Ligature (The Collision Zone)',
+    areaPhotoPrompt: 'Photograph door hardware, egress paths, fire alarm/sprinkler heads in patient areas, and any equivalency signage.',
     matrix: [
       { fgi: 'NFPA cross-refs throughout FGI', req: 'Balance egress with ligature', surveyor: 'Pre-approved equivalencies' },
       { fgi: '\u00a72.17', req: 'Doors & hardware', surveyor: 'A360 looks for systemic logic' },
@@ -679,6 +834,7 @@ const SECTIONS = [
     nav: 'Emergency Mgmt',
     title: 'Emergency Management (EM) - Environment Resilience',
     subtitle: 'Mapped from FGI \u00a71.24.9 (DEVA)',
+    areaPhotoPrompt: 'Photograph emergency power indicators, shelter-in-place areas, and emergency equipment locations.',
     matrix: [],
     items: [
       'Disaster & vulnerability assessment considers BH patients (adolescent-specific needs)',
@@ -695,6 +851,7 @@ const SECTIONS = [
     nav: 'Governance',
     title: 'Documentation & Governance',
     subtitle: 'Where CMS Lands Hardest',
+    areaPhotoPrompt: 'Photograph any posted risk tracking boards, QAPI dashboards, or design documentation available on-site.',
     matrix: [
       { fgi: '\u00a71.13', req: 'Long-range improvement', surveyor: 'Risk trend management' },
       { fgi: '\u00a71.29', req: 'Record documents', surveyor: 'Traceability over time' },
@@ -713,14 +870,22 @@ const SECTIONS = [
   },
 ];
 
+const ALL_PANEL_IDS = ['info', ...SECTIONS.map(s => s.id), 'report'];
+
 /* ================================================================
    STATE
    ================================================================ */
 let state = {
   info: {},
   docs: {},
-  items: {},   // key: sectionId-itemIdx -> { status, notes, photos:[] }
+  items: {},       // key: sectionId-itemIdx -> { status, notes, photos:[] }
+  areaPhotos: {},  // key: sectionId -> { photos:[], notes:'' }
 };
+
+/* ================================================================
+   CAMERA SVG ICON
+   ================================================================ */
+const CAMERA_SVG = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>';
 
 /* ================================================================
    INIT
@@ -755,8 +920,22 @@ function switchPanel(id) {
   document.querySelectorAll('.nav-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.panel === id);
   });
+  // Scroll nav button into view
+  const activeBtn = document.querySelector('.nav-btn.active');
+  if (activeBtn) activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   if (id === 'report') generateReport();
   updateBadges();
+  updateHeaderProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goNext(currentId) {
+  const idx = ALL_PANEL_IDS.indexOf(currentId);
+  if (idx < ALL_PANEL_IDS.length - 1) switchPanel(ALL_PANEL_IDS[idx + 1]);
+}
+function goPrev(currentId) {
+  const idx = ALL_PANEL_IDS.indexOf(currentId);
+  if (idx > 0) switchPanel(ALL_PANEL_IDS[idx - 1]);
 }
 
 /* ================================================================
@@ -767,18 +946,29 @@ function buildSectionPanels() {
     const panel = document.getElementById('panel-' + sec.id);
     let html = '';
 
-    // Header card
-    html += '<div class="card"><h2>' + sec.title + '</h2>';
+    // Area photos card (top of section)
+    html += '<div class="area-photos-card">';
+    html += '<h2>' + CAMERA_SVG + ' Area Photos &mdash; ' + sec.nav + '</h2>';
+    html += '<div class="area-desc">' + sec.areaPhotoPrompt + '</div>';
+    html += '<label class="area-photo-btn" for="area-photo-' + sec.id + '">';
+    html += CAMERA_SVG + ' Capture Area Photos</label>';
+    html += '<input type="file" id="area-photo-' + sec.id + '" accept="image/*" capture="environment" style="display:none" onchange="addAreaPhoto(\'' + sec.id + '\',event)" multiple>';
+    html += '<div class="photo-grid" id="area-photos-' + sec.id + '"></div>';
+    html += '<textarea class="area-notes" placeholder="General area observations..." oninput="setAreaNotes(\'' + sec.id + '\',this.value)" id="area-notes-' + sec.id + '"></textarea>';
+    html += '</div>';
+
+    // Collapsible reference card
+    html += '<div class="card">';
+    html += '<button class="ref-toggle" onclick="toggleRef(this)"><span class="arrow">&#9654;</span> Reference: ' + sec.title + '</button>';
+    html += '<div class="ref-content">';
     html += '<div class="section-info"><strong>A360 Domain:</strong> ' + sec.subtitle + '</div>';
 
-    // CMS hooks
     if (sec.cmsHooks.length) {
-      html += '<div style="margin-bottom:8px"><strong style="font-size:.78rem;color:var(--danger)">CMS CoP Hooks:</strong> ';
-      html += sec.cmsHooks.map(h => '<span style="font-size:.75rem;background:#fdecea;padding:2px 6px;border-radius:4px;margin:2px;display:inline-block">' + h + '</span>').join(' ');
+      html += '<div style="margin-bottom:10px"><strong style="font-size:.85rem;color:var(--danger)">CMS CoP Hooks:</strong> ';
+      html += sec.cmsHooks.map(h => '<span style="font-size:.82rem;background:#fdecea;padding:3px 8px;border-radius:6px;margin:2px;display:inline-block">' + h + '</span>').join(' ');
       html += '</div>';
     }
 
-    // Matrix
     if (sec.matrix.length) {
       html += '<table class="matrix-table"><thead><tr><th>FGI Source</th><th>Requirement</th><th>Surveyor Looks For</th></tr></thead><tbody>';
       sec.matrix.forEach(r => {
@@ -787,11 +977,10 @@ function buildSectionPanels() {
       html += '</tbody></table>';
     }
 
-    // Insight
     if (sec.insight) {
       html += '<div class="key-insight"><strong>Key Insight:</strong> ' + sec.insight + '</div>';
     }
-    html += '</div>';
+    html += '</div></div>'; // close ref-content and card
 
     // Checklist items
     html += '<div class="card"><h2>Assessment Checklist</h2>';
@@ -800,15 +989,26 @@ function buildSectionPanels() {
       html += buildChecklistItemHTML(key, item);
     });
 
-    // Evidence
     html += '<h3>Required Evidence / Documentation</h3>';
     html += '<ul class="evidence-list">';
     sec.evidence.forEach(e => { html += '<li>' + e + '</li>'; });
     html += '</ul>';
     html += '</div>';
 
+    // Prev/Next navigation
+    html += '<div class="section-nav">';
+    html += '<button class="btn btn-outline" onclick="goPrev(\'' + sec.id + '\')">&larr; Previous</button>';
+    html += '<button class="btn btn-primary" onclick="goNext(\'' + sec.id + '\')">Next &rarr;</button>';
+    html += '</div>';
+
     panel.innerHTML = html;
   });
+}
+
+function toggleRef(btn) {
+  btn.classList.toggle('open');
+  const content = btn.nextElementSibling;
+  content.classList.toggle('open');
 }
 
 function buildChecklistItemHTML(key, text) {
@@ -824,8 +1024,7 @@ function buildChecklistItemHTML(key, text) {
     <textarea class="notes-input" placeholder="Observation notes..." oninput="setItemNotes('${key}',this.value)" id="notes-${key}"></textarea>
     <div class="photo-section">
       <label class="photo-btn" for="photo-${key}">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M5 3v-1M19 3v-1"/></svg>
-        Add Photo
+        ${CAMERA_SVG} Add Photo
       </label>
       <input type="file" id="photo-${key}" accept="image/*" capture="environment" style="display:none" onchange="addPhoto('${key}',event)" multiple>
       <div class="photo-grid" id="photos-${key}"></div>
@@ -838,23 +1037,20 @@ function buildChecklistItemHTML(key, text) {
    ================================================================ */
 function setItemStatus(key, status, btn) {
   if (!state.items[key]) state.items[key] = { status: '', notes: '', photos: [] };
-  // Toggle off if same status clicked
   if (state.items[key].status === status) {
     state.items[key].status = '';
     status = '';
   } else {
     state.items[key].status = status;
   }
-  // Update UI
   const row = btn.parentElement;
-  row.querySelectorAll('.status-btn').forEach(b => {
-    b.className = 'status-btn';
-  });
+  row.querySelectorAll('.status-btn').forEach(b => { b.className = 'status-btn'; });
   if (status) btn.className = 'status-btn selected-' + status;
 
   const ci = document.getElementById('ci-' + key);
   ci.className = 'checklist-item' + (status ? ' status-' + status : '');
   updateBadges();
+  updateHeaderProgress();
   autoSave();
 }
 
@@ -882,15 +1078,59 @@ function setDocStatus(docId, status, btn) {
 }
 
 /* ================================================================
-   PHOTO HANDLING
+   AREA PHOTOS (section-level)
+   ================================================================ */
+function addAreaPhoto(secId, event) {
+  if (!state.areaPhotos[secId]) state.areaPhotos[secId] = { photos: [], notes: '' };
+  processPhotos(event.target.files, (dataUrl) => {
+    state.areaPhotos[secId].photos.push(dataUrl);
+    renderAreaPhotos(secId);
+    autoSave();
+  });
+  event.target.value = '';
+}
+
+function setAreaNotes(secId, val) {
+  if (!state.areaPhotos[secId]) state.areaPhotos[secId] = { photos: [], notes: '' };
+  state.areaPhotos[secId].notes = val;
+  autoSave();
+}
+
+function renderAreaPhotos(secId) {
+  const grid = document.getElementById('area-photos-' + secId);
+  if (!grid) return;
+  const photos = (state.areaPhotos[secId] && state.areaPhotos[secId].photos) || [];
+  grid.innerHTML = photos.map((p, i) => `
+    <div class="photo-thumb">
+      <img src="${p}" onclick="openLightbox(this.src)" alt="Area photo ${i+1}">
+      <button class="remove-photo" onclick="removeAreaPhoto('${secId}',${i})">&times;</button>
+    </div>
+  `).join('');
+}
+
+function removeAreaPhoto(secId, idx) {
+  state.areaPhotos[secId].photos.splice(idx, 1);
+  renderAreaPhotos(secId);
+  autoSave();
+}
+
+/* ================================================================
+   ITEM PHOTOS
    ================================================================ */
 function addPhoto(key, event) {
   if (!state.items[key]) state.items[key] = { status: '', notes: '', photos: [] };
-  const files = event.target.files;
+  processPhotos(event.target.files, (dataUrl) => {
+    state.items[key].photos.push(dataUrl);
+    renderPhotos(key);
+    autoSave();
+  });
+  event.target.value = '';
+}
+
+function processPhotos(files, callback) {
   Array.from(files).forEach(file => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      // Resize for storage efficiency
       const img = new Image();
       img.onload = () => {
         const canvas = document.createElement('canvas');
@@ -903,16 +1143,12 @@ function addPhoto(key, event) {
         canvas.width = w;
         canvas.height = h;
         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-        state.items[key].photos.push(dataUrl);
-        renderPhotos(key);
-        autoSave();
+        callback(canvas.toDataURL('image/jpeg', 0.7));
       };
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
   });
-  event.target.value = '';
 }
 
 function renderPhotos(key) {
@@ -921,7 +1157,7 @@ function renderPhotos(key) {
   const photos = (state.items[key] && state.items[key].photos) || [];
   grid.innerHTML = photos.map((p, i) => `
     <div class="photo-thumb">
-      <img src="${p}" onclick="openLightbox('${p}')" alt="Photo ${i+1}">
+      <img src="${p}" onclick="openLightbox(this.src)" alt="Photo ${i+1}">
       <button class="remove-photo" onclick="removePhoto('${key}',${i})">&times;</button>
     </div>
   `).join('');
@@ -937,9 +1173,13 @@ function openLightbox(src) {
   document.getElementById('lightboxImg').src = src;
   document.getElementById('lightbox').classList.add('open');
 }
+function closeLightbox(e) {
+  document.getElementById('lightbox').classList.remove('open');
+  e.stopPropagation();
+}
 
 /* ================================================================
-   BADGES
+   BADGES & HEADER PROGRESS
    ================================================================ */
 function updateBadges() {
   SECTIONS.forEach(sec => {
@@ -955,6 +1195,19 @@ function updateBadges() {
     else if (done === total) { badge.className = 'badge complete'; badge.textContent = done + '/' + total; }
     else { badge.className = 'badge partial'; badge.textContent = done + '/' + total; }
   });
+}
+
+function updateHeaderProgress() {
+  let total = 0, done = 0;
+  SECTIONS.forEach(sec => {
+    sec.items.forEach((_, idx) => {
+      total++;
+      const key = sec.id + '-' + idx;
+      if (state.items[key] && state.items[key].status) done++;
+    });
+  });
+  const pct = total > 0 ? Math.round(done / total * 100) : 0;
+  document.getElementById('headerPct').textContent = pct + '%';
 }
 
 /* ================================================================
@@ -974,7 +1227,6 @@ function gatherInfo() {
     unitArea: document.getElementById('unitArea').value,
     assessmentPurpose: document.getElementById('assessmentPurpose').value,
   };
-  // Gather doc notes
   document.querySelectorAll('[data-field]').forEach(el => {
     state.docs[el.dataset.field] = el.value;
   });
@@ -983,11 +1235,9 @@ function gatherInfo() {
 function saveToLocal() {
   gatherInfo();
   try {
-    // Save photos separately to avoid quota issues
-    const saveState = JSON.parse(JSON.stringify(state));
-    localStorage.setItem('bh-assessment', JSON.stringify(saveState));
+    localStorage.setItem('bh-assessment', JSON.stringify(state));
   } catch(e) {
-    console.warn('LocalStorage save failed (possibly quota):', e);
+    console.warn('LocalStorage save failed:', e);
   }
 }
 
@@ -996,6 +1246,7 @@ function loadFromLocal(silent) {
     const data = localStorage.getItem('bh-assessment');
     if (!data) { if (!silent) alert('No saved assessment found.'); return; }
     state = JSON.parse(data);
+    if (!state.areaPhotos) state.areaPhotos = {};
     restoreUI();
     if (!silent) alert('Assessment loaded successfully.');
   } catch(e) {
@@ -1004,7 +1255,6 @@ function loadFromLocal(silent) {
 }
 
 function restoreUI() {
-  // Info fields
   if (state.info) {
     if (state.info.facilityName) document.getElementById('facilityName').value = state.info.facilityName;
     if (state.info.reviewerName) document.getElementById('reviewerName').value = state.info.reviewerName;
@@ -1013,19 +1263,16 @@ function restoreUI() {
     if (state.info.assessmentPurpose) document.getElementById('assessmentPurpose').value = state.info.assessmentPurpose;
   }
 
-  // Doc notes
   if (state.docs) {
     document.querySelectorAll('[data-field]').forEach(el => {
       if (state.docs[el.dataset.field]) el.value = state.docs[el.dataset.field];
     });
-    // Doc statuses
     ['doc-fp','doc-sra','doc-lra','doc-secra','doc-lsp','doc-cx','doc-hva'].forEach(docId => {
       if (state.docs[docId] && state.docs[docId].status) {
         const container = document.getElementById(docId);
         if (!container) return;
         const status = state.docs[docId].status;
-        const btns = container.querySelectorAll('.status-btn');
-        btns.forEach(b => {
+        container.querySelectorAll('.status-btn').forEach(b => {
           if (b.dataset.status === status) {
             const cls = status === 'available' ? 'selected-compliant' : status === 'outdated' ? 'selected-needs-review' : 'selected-non-compliant';
             b.className = 'status-btn ' + cls;
@@ -1035,7 +1282,6 @@ function restoreUI() {
     });
   }
 
-  // Checklist items
   if (state.items) {
     Object.keys(state.items).forEach(key => {
       const item = state.items[key];
@@ -1043,8 +1289,7 @@ function restoreUI() {
       if (!ci) return;
       if (item.status) {
         ci.className = 'checklist-item status-' + item.status;
-        const btns = ci.querySelectorAll('.status-btn');
-        btns.forEach(b => {
+        ci.querySelectorAll('.status-btn').forEach(b => {
           if (b.textContent.toLowerCase().replace(/[\s/-]/g,'') === item.status.replace(/-/g,'')) {
             b.className = 'status-btn selected-' + item.status;
           }
@@ -1055,11 +1300,22 @@ function restoreUI() {
       renderPhotos(key);
     });
   }
+
+  // Area photos
+  if (state.areaPhotos) {
+    Object.keys(state.areaPhotos).forEach(secId => {
+      renderAreaPhotos(secId);
+      const notesEl = document.getElementById('area-notes-' + secId);
+      if (notesEl && state.areaPhotos[secId].notes) notesEl.value = state.areaPhotos[secId].notes;
+    });
+  }
+
   updateBadges();
+  updateHeaderProgress();
 }
 
 /* ================================================================
-   EXPORT / IMPORT JSON
+   EXPORT / IMPORT
    ================================================================ */
 function exportJSON() {
   gatherInfo();
@@ -1073,9 +1329,7 @@ function exportJSON() {
   URL.revokeObjectURL(url);
 }
 
-function importJSON() {
-  document.getElementById('importFile').click();
-}
+function importJSON() { document.getElementById('importFile').click(); }
 
 function handleImport(event) {
   const file = event.target.files[0];
@@ -1084,6 +1338,7 @@ function handleImport(event) {
   reader.onload = (e) => {
     try {
       state = JSON.parse(e.target.result);
+      if (!state.areaPhotos) state.areaPhotos = {};
       restoreUI();
       alert('Assessment imported successfully.');
     } catch(err) {
@@ -1096,19 +1351,18 @@ function handleImport(event) {
 
 function clearAll() {
   if (!confirm('Clear all assessment data? This cannot be undone.')) return;
-  state = { info: {}, docs: {}, items: {} };
+  state = { info: {}, docs: {}, items: {}, areaPhotos: {} };
   localStorage.removeItem('bh-assessment');
   location.reload();
 }
 
 /* ================================================================
-   REPORT GENERATION
+   REPORT
    ================================================================ */
 function generateReport() {
   gatherInfo();
   const panel = document.getElementById('panel-report');
 
-  // Summary stats
   let totalItems = 0, compliant = 0, nonCompliant = 0, needsReview = 0, na = 0, notAssessed = 0;
   SECTIONS.forEach(sec => {
     sec.items.forEach((_, idx) => {
@@ -1126,12 +1380,12 @@ function generateReport() {
   const compRate = assessed > 0 ? Math.round(compliant / assessed * 100) : 0;
 
   let html = '<div class="card"><h2>Assessment Report</h2>';
-  html += '<p style="font-size:.82rem;color:var(--text-light);margin-bottom:4px">';
-  html += '<strong>' + (state.info.facilityName || '(No facility name)') + '</strong>';
-  html += ' &mdash; ' + (state.info.unitArea || '(No unit specified)');
-  html += '<br>Reviewer: ' + (state.info.reviewerName || '(Not specified)');
-  html += ' | Date: ' + (state.info.assessmentDate || '(Not set)');
-  html += ' | Purpose: ' + (state.info.assessmentPurpose || '(Not set)');
+  html += '<p style="font-size:.9rem;color:var(--text-light);margin-bottom:6px">';
+  html += '<strong>' + esc(state.info.facilityName || '(No facility name)') + '</strong>';
+  html += ' &mdash; ' + esc(state.info.unitArea || '(No unit specified)');
+  html += '<br>Reviewer: ' + esc(state.info.reviewerName || '(Not specified)');
+  html += ' | Date: ' + esc(state.info.assessmentDate || '(Not set)');
+  html += ' | Purpose: ' + esc(state.info.assessmentPurpose || '(Not set)');
   html += '</p>';
 
   html += '<div class="stats-grid">';
@@ -1155,13 +1409,13 @@ function generateReport() {
     const status = ds && ds.status ? ds.status : 'not checked';
     const notes = state.docs[docId + '-notes'] || '';
     const badge = status === 'available' ? 'compliant' : status === 'outdated' ? 'needs-review' : status === 'missing' ? 'non-compliant' : 'not-assessed';
-    html += '<div style="padding:4px 0;font-size:.82rem"><span class="finding-badge ' + badge + '">' + status.toUpperCase() + '</span> ' + label;
-    if (notes) html += '<br><span style="color:var(--text-light);font-size:.75rem;margin-left:16px">' + escHtml(notes) + '</span>';
+    html += '<div style="padding:6px 0;font-size:.9rem"><span class="finding-badge ' + badge + '">' + status.toUpperCase() + '</span> ' + label;
+    if (notes) html += '<br><span style="color:var(--text-light);font-size:.82rem;margin-left:16px">' + esc(notes) + '</span>';
     html += '</div>';
   });
   html += '</div>';
 
-  // Non-compliant & needs-review findings
+  // Findings requiring action
   html += '<div class="card report-section"><h2>Findings Requiring Action</h2>';
   let hasFindings = false;
   SECTIONS.forEach(sec => {
@@ -1176,44 +1430,72 @@ function generateReport() {
     if (findings.length) {
       hasFindings = true;
       html += '<h3>' + sec.title + '</h3>';
+
+      // Area photos for this section
+      const ap = state.areaPhotos[sec.id];
+      if (ap && ap.photos && ap.photos.length) {
+        html += '<div style="margin-bottom:10px"><strong style="font-size:.82rem">Area Photos:</strong>';
+        if (ap.notes) html += '<br><span style="font-size:.82rem;color:var(--text-light)">' + esc(ap.notes) + '</span>';
+        html += '<div class="photo-grid" style="margin-top:6px">';
+        ap.photos.forEach(p => {
+          html += '<div class="photo-thumb"><img src="' + p + '" onclick="openLightbox(this.src)"></div>';
+        });
+        html += '</div></div>';
+      }
+
       findings.forEach(f => {
-        html += '<div style="padding:6px 0;border-bottom:1px solid var(--border)">';
+        html += '<div style="padding:8px 0;border-bottom:1px solid var(--border)">';
         html += '<span class="finding-badge ' + f.status + '">' + f.status.replace('-',' ').toUpperCase() + '</span> ';
-        html += '<span style="font-size:.82rem">' + escHtml(f.item) + '</span>';
-        if (f.notes) html += '<br><span style="font-size:.78rem;color:var(--text-light);margin-left:16px">Notes: ' + escHtml(f.notes) + '</span>';
+        html += '<span style="font-size:.9rem">' + esc(f.item) + '</span>';
+        if (f.notes) html += '<br><span style="font-size:.85rem;color:var(--text-light);margin-left:16px">Notes: ' + esc(f.notes) + '</span>';
         if (f.photos && f.photos.length) {
-          html += '<div class="photo-grid" style="margin:6px 0 0 16px">';
+          html += '<div class="photo-grid" style="margin:8px 0 0 16px">';
           f.photos.forEach(p => {
-            html += '<div class="photo-thumb"><img src="' + p + '" onclick="openLightbox(\'' + p + '\')"></div>';
+            html += '<div class="photo-thumb"><img src="' + p + '" onclick="openLightbox(this.src)"></div>';
           });
           html += '</div>';
         }
-        // CMS hooks
         if (sec.cmsHooks.length) {
-          html += '<div style="font-size:.72rem;color:var(--danger);margin-left:16px;margin-top:4px">CMS refs: ' + sec.cmsHooks.join(', ') + '</div>';
+          html += '<div style="font-size:.78rem;color:var(--danger);margin-left:16px;margin-top:4px">CMS refs: ' + sec.cmsHooks.join(', ') + '</div>';
         }
         html += '</div>';
       });
     }
   });
-  if (!hasFindings) html += '<p style="font-size:.82rem;color:var(--text-light)">No non-compliant or needs-review findings recorded.</p>';
+  if (!hasFindings) html += '<p style="font-size:.9rem;color:var(--text-light)">No non-compliant or needs-review findings recorded.</p>';
   html += '</div>';
 
-  // Full section breakdown
+  // Full detail
   html += '<div class="card report-section"><h2>Complete Assessment Detail</h2>';
   SECTIONS.forEach(sec => {
     html += '<h3>' + sec.title + '</h3>';
+
+    // Area photos
+    const ap = state.areaPhotos[sec.id];
+    if (ap && ((ap.photos && ap.photos.length) || ap.notes)) {
+      html += '<div style="margin-bottom:8px;padding:8px;background:#f0f7ff;border-radius:var(--radius)">';
+      html += '<strong style="font-size:.85rem">Area Photos & Observations</strong>';
+      if (ap.notes) html += '<br><span style="font-size:.85rem;color:var(--text-light)">' + esc(ap.notes) + '</span>';
+      if (ap.photos && ap.photos.length) {
+        html += '<div class="photo-grid" style="margin-top:6px">';
+        ap.photos.forEach(p => {
+          html += '<div class="photo-thumb"><img src="' + p + '" onclick="openLightbox(this.src)"></div>';
+        });
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+
     sec.items.forEach((item, idx) => {
       const key = sec.id + '-' + idx;
       const s = state.items[key] || {};
       const status = s.status || 'not-assessed';
-      const badgeLabel = status.replace(/-/g,' ').toUpperCase();
-      html += '<div style="padding:4px 0;font-size:.82rem"><span class="finding-badge ' + status + '">' + badgeLabel + '</span> ' + escHtml(item);
-      if (s.notes) html += '<br><span style="color:var(--text-light);font-size:.75rem;margin-left:16px">' + escHtml(s.notes) + '</span>';
+      html += '<div style="padding:6px 0;font-size:.9rem"><span class="finding-badge ' + status + '">' + status.replace(/-/g,' ').toUpperCase() + '</span> ' + esc(item);
+      if (s.notes) html += '<br><span style="color:var(--text-light);font-size:.82rem;margin-left:16px">' + esc(s.notes) + '</span>';
       if (s.photos && s.photos.length) {
-        html += '<div class="photo-grid" style="margin:4px 0 0 16px">';
+        html += '<div class="photo-grid" style="margin:6px 0 0 16px">';
         s.photos.forEach(p => {
-          html += '<div class="photo-thumb"><img src="' + p + '" onclick="openLightbox(\'' + p + '\')"></div>';
+          html += '<div class="photo-thumb"><img src="' + p + '" onclick="openLightbox(this.src)"></div>';
         });
         html += '</div>';
       }
@@ -1222,8 +1504,7 @@ function generateReport() {
   });
   html += '</div>';
 
-  // Print button
-  html += '<div class="no-print" style="text-align:center;margin:16px 0"><button class="btn btn-primary" onclick="window.print()">Print Report</button></div>';
+  html += '<div class="no-print" style="text-align:center;margin:20px 0"><button class="btn btn-primary" onclick="window.print()">Print Report</button></div>';
 
   panel.innerHTML = html;
 }
@@ -1232,7 +1513,7 @@ function statCard(num, label, color, textColor) {
   return '<div class="stat-card"><div class="stat-num" style="color:' + color + '">' + num + '</div><div class="stat-label"' + (textColor ? ' style="color:' + textColor + '"' : '') + '>' + label + '</div></div>';
 }
 
-function escHtml(s) {
+function esc(s) {
   const d = document.createElement('div');
   d.textContent = s;
   return d.innerHTML;
